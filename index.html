@@ -16,15 +16,21 @@
 </head>
 
 <body onload="init()">
-    <h1>Pokedex</h1>
-    <div class="content" id="content">
-        
-    </div>
-    
-    
+    <header>
+        <img src="img/pokeball.png" alt="">
+        <form onsubmit="return false;">
+            <label for="pokemonSearch" name="pokemon-searche"></label>
+            <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control">
+            <button class="btn btn-light">Search</button>
+        </form>
+        <img src="img/menu.png" alt="">
+    </header>
+    <main>
+        <h1>Pokedex</h1>
+        <div class="content" id="content">
 
-
-
+        </div>
+    </main>
 </body>
 
 </html>
