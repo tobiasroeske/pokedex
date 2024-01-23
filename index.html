@@ -15,7 +15,7 @@
     </body>
 </head>
 
-<body onload="init()">
+<body onload="init(1, 25)">
     <header>
         <img src="img/pokeball.png" alt="">
         <form onsubmit="return false;">
@@ -31,8 +31,15 @@
 
         </div>
 
-        <div class="current-pages" id="pages">
-
+        <div class="pages mb-5" id="pages">
+            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()"><img src="img/arrow-left.svg" alt="" class="icon">Previous Page</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(1, 25)">1</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(26, 50)">2</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(51, 75)">3</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(76, 100)">4</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(101, 125)">5</button>
+            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(126, 151)">6</button>
+            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()">Next Page <img src="img/arrow-right.svg" alt="" class="icon" ></button>
         </div>
     </main>
 </body>

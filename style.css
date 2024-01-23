@@ -42,6 +42,12 @@ main {
   gap: 64px;
 }
 
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 .content {
   display: flex;
   justify-content: center;
@@ -96,6 +102,19 @@ main {
   background-color: rgb(231, 184, 138);
 }
 
+.ground {
+  background-color: rgb(124, 72, 9);
+}
+
+.ghost {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.4)
+}
+
+.dragon {
+  background-color: rgba(197, 168, 6, 0.903);
+}
+
 .poke-details {
   display: flex;
   justify-content: space-between;
@@ -121,4 +140,14 @@ main {
   width: 128px;
   height: 128px;
   object-fit: contain;
+}
+
+.pages {
+  display: flex;
+  justify-content: space-around;
+  width: 650px;
+}
+
+.d-none {
+  display: none;
 }
