@@ -60,39 +60,39 @@ main {
   padding: 16px;
 }
 
-.Grass,
-.Poison,
-.Bug {
+.grass,
+.poison,
+.bug {
   background-color: rgba(97, 207, 12, 0.898);
 }
 
-.Ice,
-.Water {
+.ice,
+.water {
   background-color: rgba(69, 166, 245);
 }
 
-.Fire {
+.fire {
   background-color: rgb(245, 69, 69);
 }
 
-.Electric {
+.electric {
   background-color: rgb(240, 221, 50);
 }
 
-.Psychic,
-.Fighting {
+.psychic,
+.fighting {
   background-color: rgb(150, 34, 163);
 }
 
-.Rock,
-.Dark,
-.Steel {
+.rock,
+.dark,
+.steel {
   background-color: rgb(115, 112, 115);
 }
 
-.Flying,
-.Normal,
-.Fairy {
+.flying,
+.normal,
+.fairy {
   background-color: rgb(231, 184, 138);
 }
 
