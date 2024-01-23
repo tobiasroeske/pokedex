@@ -105,27 +105,27 @@ function setTypeColor(pokemon) {
             break;
         case 'Fire':
             pokemonOverview.style.backgroundColor = '#f54545';
-            pokemonTypes.style.backgroundColor = ''
+            // pokemonTypes.style.backgroundColor = ''
             break;
         case 'Electric':
             pokemonOverview.style.backgroundColor = '#f0dd32';
-            pokemonTypes.style.backgroundColor = ''
+            // pokemonTypes.style.backgroundColor = ''
         case 'Psychic' :
         case 'Fighting':
             pokemonOverview.style.backgroundColor = '#9622a3';
-            pokemonTypes.style.backgroundColor = ''
+            // pokemonTypes.style.backgroundColor = ''
             break;
         case 'Rock':
         case 'Dark':
         case 'Steel':
             pokemonOverview.style.backgroundColor = '#737073';
-            pokemonTypes.style.backgroundColor = ''
+            // pokemonTypes.style.backgroundColor = ''
             break;
         case 'Flying':
         case 'Fairy':
         case 'Normal':
             pokemonOverview.style.backgroundColor = '#ebcd9d';
-            pokemonTypes.style.backgroundColor = ''
+            // pokemonTypes.style.backgroundColor = ''
             break;
         // Füge hier weitere Cases für andere Typen hinzu
         default:

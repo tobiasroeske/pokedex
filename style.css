@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+h2 {
+  filter: drop-shadow(2px 4px 6px black);
+}
+
 .content {
   display: flex;
   justify-content: center;
@@ -38,8 +42,8 @@ body {
   gap: 16px;
 }
 .types span {
-  background-color: rgba(81, 172, 12, 0.898);
-  text-align: center;
+  background-color: transparent;
+  filter: drop-shadow(2px 4px 6px black);  text-align: center;
   vertical-align: middle;
   padding: 4px 16px;
   border-radius: 12px;
