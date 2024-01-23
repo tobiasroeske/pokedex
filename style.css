@@ -13,14 +13,14 @@ h1 {
 }
 
 h2 {
-  filter: drop-shadow(2px 4px 6px rgba(0,0,0, 0.5));
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0px 2px 8px 4px rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 8px 4px rgba(0, 0, 0, 0.1);
   padding: 16px 48px;
 }
 
@@ -31,7 +31,7 @@ form {
 }
 
 header img:hover {
-  filter: drop-shadow(2px 4px 6px rgba(0,0,0, 0.5));
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
   cursor: pointer;
 }
 
@@ -55,10 +55,45 @@ main {
   align-items: center;
   width: 250px;
   height: 200px;
-  background-color: #61cf0ce5;
   color: white;
   border-radius: 16px;
   padding: 16px;
+}
+
+.Grass,
+.Poison,
+.Bug {
+  background-color: rgba(97, 207, 12, 0.898);
+}
+
+.Ice,
+.Water {
+  background-color: rgba(69, 166, 245);
+}
+
+.Fire {
+  background-color: rgb(245, 69, 69);
+}
+
+.Electric {
+  background-color: rgb(240, 221, 50);
+}
+
+.Psychic,
+.Fighting {
+  background-color: rgb(150, 34, 163);
+}
+
+.Rock,
+.Dark,
+.Steel {
+  background-color: rgb(115, 112, 115);
+}
+
+.Flying,
+.Normal,
+.Fairy {
+  background-color: rgb(231, 184, 138);
 }
 
 .poke-details {
@@ -74,12 +109,12 @@ main {
   gap: 16px;
 }
 .types span {
-  background-color: transparent;
-  filter: drop-shadow(2px 4px 6px rgba(0,0,0, 0.5));  
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0, 0.6));
   text-align: center;
   vertical-align: middle;
   padding: 4px 16px;
   border-radius: 12px;
+  font-weight: 500;
 }
 
 .poke-image {
