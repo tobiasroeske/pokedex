@@ -31,15 +31,19 @@
 
         </div>
 
-        <div class="pages mb-5" id="pages">
-            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()"><img src="img/arrow-left.svg" alt="" class="icon">Previous Page</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(1, 25)">1</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(26, 50)">2</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(51, 75)">3</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(76, 100)">4</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(101, 125)">5</button>
-            <button class="btn btn-light focus-ring focus-ring-secondary" onclick="changePage(126, 151)">6</button>
-            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()">Next Page <img src="img/arrow-right.svg" alt="" class="icon" ></button>
+        <div class="pages-container mb-5" id="pages">
+            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()"><img
+                    src="img/arrow-left.svg" alt="" class="icon"></button>
+            <div class="page-btns">
+                <button id="pageButton1" class="btn btn-light active-page" onclick="changePage(0, 25)">1</button>
+                <button id="pageButton2" class="btn btn-light" onclick="changePage(25, 50)">2</button>
+                <button id="pageButton3" class="btn btn-light" onclick="changePage(50, 75)">3</button>
+                <button id="pageButton4" class="btn btn-light" onclick="changePage(75, 100)">4</button>
+                <button id="pageButton5" class="btn btn-light" onclick="changePage(100, 125)">5</button>
+                <button id="pageButton6" class="btn btn-light" onclick="changePage(125, 151)">6</button>
+            </div>
+
+            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()"><img src="img/arrow-right.svg" alt="" class="icon"></button>
         </div>
     </main>
 </body>

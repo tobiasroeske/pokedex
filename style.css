@@ -64,6 +64,14 @@ main {
   color: white;
   border-radius: 16px;
   padding: 16px;
+  position: relative;
+}
+
+.pokeNumber {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: white;
 }
 
 .grass,
@@ -142,12 +150,23 @@ main {
   object-fit: contain;
 }
 
-.pages {
+.pages-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.page-btns {
   display: flex;
   justify-content: space-around;
-  width: 650px;
+  gap: 24px;
+  max-width: 350px;
 }
 
 .d-none {
   display: none;
+}
+
+.active-page {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
 }

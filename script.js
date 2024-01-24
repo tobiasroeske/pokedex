@@ -2,30 +2,12 @@ let currentPokemon;
 let pokemonList = [];
 let limit = 25;
 let offset = 0;
-// let types = [
-//     "Electric",
-//     "Poison",
-//     "Psychic",
-//     "Ground",
-//     "Ice",
-//     "Fighting",
-//     "Grass",
-//     "Rock",
-//     "Dark",
-//     "Steel",
-//     "Water",
-//     "Fairy",
-//     "Fire",
-//     "Flying",
-//     "Bug",
-//     "Normal"
-//   ];
+let currentPage = 1;
 
 async function init() {
     await loadAllPokemon();
     renderPokemon();
 }
-
 
 async function loadAllPokemon() {
     let url = 'https://pokeapi.co/api/v2/pokemon/'
@@ -41,15 +23,8 @@ async function loadAllPokemon() {
     }
 }
 
-async function changePage(start, end) {
-    await init(start, end)
-}
-
 async function showNextPage() {
-    let nextPageButton = document.getElementById('nextPage');
-    let previousPageButton = document.getElementById('previousPage');
     if (limit < 125) {
-        previousPageButton.classList.remove('d-none');
         offset += 25;
         limit += 25;
         await init();
@@ -57,23 +32,46 @@ async function showNextPage() {
         offset = 125;
         limit = 151;
         await init();
-        nextPageButton.classList.add('d-none');
         limit = 150;
     }
+    updatePageButton(limit)
 }
 
 async function showPreviousPage() {
-    let previousPageButton = document.getElementById('previousPage');
-    let nextPageButton = document.getElementById('nextPage');
     if (limit > 50) {
-        nextPageButton.classList.remove('d-none');
-        offset-= 25;
+        offset -= 25;
         limit -= 25;
         await init();
     } else {
         offset -= 25;
         limit -= 25;
         await init();
+    }
+    updatePageButton(limit);
+}
+
+async function changePage(start, end) {
+    offset = start;
+    limit = end;
+    updatePageButton(end);
+    await init();
+}
+
+function updatePageButton(end) {
+    let previousPageButton = document.getElementById('previousPage');
+    let nextPageButton = document.getElementById('nextPage');
+    previousPageButton.classList.remove('d-none');
+    nextPageButton.classList.remove('d-none');
+    for (let i = 1; i <= 6; i++) {
+        let button = document.getElementById(`pageButton${i}`);
+        button.classList.remove('active-page');
+    }
+    currentPage = Math.round(end / 25);
+    let selectedButton = document.getElementById(`pageButton${currentPage}`);
+    selectedButton.classList.add('active-page');
+    if (currentPage == 6) {
+        nextPageButton.classList.add('d-none');
+    } else if (currentPage == 1) {
         previousPageButton.classList.add('d-none');
     }
 }
@@ -105,6 +103,7 @@ function typeHTML(pokemon) {
 function generateOverviewHTML(pokemon) {
     return /*html*/`
     <div class="poke-container-small ${pokemon['types'][0]['type']['name']}" id="${pokemon['name']}Overview">
+        <span class="pokeNumber">#${pokemon['id']}</span>
         <h2>${capitalizeFirstLetter(pokemon['name'])}</h2>
         <div class="poke-details" id="pokeDetails">
             <div class="types">
