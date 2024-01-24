@@ -44,7 +44,7 @@ async function loadAllPokemon() {
 async function changePage(start, end) {
     await init(start, end)
 }
-// Die beiden Funktionen funktionieren noch nicht!
+
 async function showNextPage() {
     let nextPageButton = document.getElementById('nextPage');
     let previousPageButton = document.getElementById('previousPage');
@@ -58,13 +58,15 @@ async function showNextPage() {
         limit = 151;
         await init();
         nextPageButton.classList.add('d-none');
+        limit = 150;
     }
 }
 
 async function showPreviousPage() {
     let previousPageButton = document.getElementById('previousPage');
+    let nextPageButton = document.getElementById('nextPage');
     if (limit > 50) {
-        previousPageButton.classList.remove('d-none');
+        nextPageButton.classList.remove('d-none');
         offset-= 25;
         limit -= 25;
         await init();
