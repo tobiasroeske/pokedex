@@ -1,6 +1,6 @@
 let currentPokemon;
 let pokemonList = [];
-let pokemonInfos = [];
+let currentInfo;
 let limit = 25;
 let offset = 0;
 let currentPage = 1;
@@ -123,13 +123,21 @@ function generateOverviewHTML(pokemon, i) {
     </div>
 `;
 }
-
+// Soll umgeschrieben werden und eine render Funktion implementiert werden, die Infos aus currentInfos zieht
+//
 async function openPokemonCard(index) {
     let popup = document.getElementById('popup');
+    let pokemonInfo = await getPokemonDetails('pokemon-species', index);
     let pokemon = pokemonList[index];
     popup.classList.remove('d-none');
+    renderPokemonCard(pokemon, pokemonInfo);
+}
+// Brauche eine Funktion renderInfo(), die die Info Felder befüllt, nachdem renderCard ausgeführt wurde
+// 
+function renderPokemonCard(pokemon, info) {
+    let popup = document.getElementById('popup');
     popup.innerHTML = '';
-    popup.innerHTML += await generatePokemonCardHTML(pokemon, index);
+    popup.innerHTML += generatePokemonCardHTML(pokemon, info);
 }
 
 async function getPokemonDetails(param, index) {
@@ -146,7 +154,7 @@ async function getPokemonDetails(param, index) {
 }
 
 
-async function generatePokemonCardHTML(pokemon, index) {
+function generatePokemonCardHTML(pokemon, info) {
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
@@ -178,7 +186,7 @@ async function generatePokemonCardHTML(pokemon, index) {
                         </li>
                     </ul>
                     <div id="pokemonInfo">
-                    
+                        <i>${info['flavor_text_entries'][1]['flavor_text']}</i>
                     </div>
             </div>
             
