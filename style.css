@@ -247,10 +247,17 @@ main {
   height: 50%;
 }
 
+.nav-tabs {
+  justify-content: center;
+  border-color: #9a9c9f;
+  --bs-nav-tabs-link-active-border-color: #9a9c9f #9a9c9f #fff;
+}
+
 .nav-item .nav-link {
   color: black;
   padding-top: 16px;
 }
+
 
 .nav-item:hover {
   background-color: rgba(0, 0, 0, 0.05);

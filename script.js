@@ -1,5 +1,6 @@
-let currentPokemon;
+
 let pokemonList = [];
+let currentPokemon;
 let currentInfo;
 let limit = 25;
 let offset = 0;
@@ -16,7 +17,7 @@ async function loadPokemon() {
     for (let i = offset + 1; i <= limit; i++) {
         let response = await fetch(`${url}${i}`);
         if (response.ok) {
-            currentPokemon = await response.json();
+            let currentPokemon = await response.json();
             pokemonList.push(currentPokemon);
         } else {
             alert('It seems like something went wrong, could not find the pokemon')
@@ -127,17 +128,18 @@ function generateOverviewHTML(pokemon, i) {
 //
 async function openPokemonCard(index) {
     let popup = document.getElementById('popup');
-    let pokemonInfo = await getPokemonDetails('pokemon-species', index);
-    let pokemon = pokemonList[index];
+    // let pokemonInfo = await getPokemonDetails('pokemon-species', index);
+    await getPokemonDetails('pokemon-species', index);
+    currentPokemon = pokemonList[index];
     popup.classList.remove('d-none');
-    renderPokemonCard(pokemon, pokemonInfo);
+    renderPokemonCard(currentPokemon);
 }
 // Brauche eine Funktion renderInfo(), die die Info Felder befüllt, nachdem renderCard ausgeführt wurde
 // 
-function renderPokemonCard(pokemon, info) {
+function renderPokemonCard(pokemon) {
     let popup = document.getElementById('popup');
     popup.innerHTML = '';
-    popup.innerHTML += generatePokemonCardHTML(pokemon, info);
+    popup.innerHTML += generatePokemonCardHTML(pokemon);
 }
 
 async function getPokemonDetails(param, index) {
@@ -146,6 +148,7 @@ async function getPokemonDetails(param, index) {
     let response = await fetch(url);
     if (response.ok) {
         let pokemonInfo = await response.json();
+        currentInfo = pokemonInfo;
         return pokemonInfo;
     } else {
         alert('It seems like something went wrong, could not find the pokemon')
@@ -154,7 +157,7 @@ async function getPokemonDetails(param, index) {
 }
 
 
-function generatePokemonCardHTML(pokemon, info) {
+function generatePokemonCardHTML(pokemon) {
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
@@ -173,23 +176,69 @@ function generatePokemonCardHTML(pokemon, info) {
             <div class="pokemon-card-bottom">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">About</a>
+                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeInfoTag('aboutTab')">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Base Stats</a>
+                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeInfoTag('statsTab')">
+                            <a id="statsTab" class="nav-link" href="#">Base Stats</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Evolution</a>
+                        <li class="nav-item" onclick="changeInfoTag('evolutionTab')">
+                            <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Moves</a>
+                        <li class="nav-item" onclick="changeInfoTag('movesTab')">
+                            <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>
                     <div id="pokemonInfo">
-                        <i>${info['flavor_text_entries'][1]['flavor_text']}</i>
+                        ${generateAboutHTML()}
                     </div>
             </div>
             
         </div>
     `
 }
+
+function changeInfoTag(id) {
+    let specificTab = document.getElementById(id);
+    let tabs = document.getElementsByClassName('nav-link');
+    for (let i = 0; i < tabs.length; i++) {
+        let tab = tabs[i];
+        tab.classList.remove('active');
+        tab.removeAttribute('aria-current');
+    }
+    specificTab.classList.add('active');
+    specificTab.setAttribute('aria-current', 'page');
+}
+
+function showInfo(htmlFunc) {
+    let pokeInfo = document.getElementById('pokemonInfo');
+    pokeInfo.innerHTML = htmlFunc;
+}
+
+function generateBaseStatsHTML() {
+    return /*html*/`
+        <table>
+            ${renderStatTable()}
+        </table>
+    `
+}
+
+function generateAboutHTML() {
+    return /*html*/`
+         <i>${currentInfo['flavor_text_entries'][1]['flavor_text']}</i>
+    `
+}
+
+function renderStatTable() {
+    let htmlText;
+    for (let i = 0; i < currentPokemon['stats'].length; i++) {
+        let stat = currentPokemon['stats'][i];
+        htmlText += /*html*/`
+            <tr>
+                <td>${stat['stat']['name']}</td>
+                <td>${stat['base_stat']}</td>
+            </tr>
+        `;
+    }
+    return htmlText;
+}
+
