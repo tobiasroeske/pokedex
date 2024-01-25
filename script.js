@@ -217,7 +217,7 @@ function showInfo(htmlFunc) {
 
 function generateBaseStatsHTML() {
     return /*html*/`
-        <table class="table table-striped">
+        <table class="table">
             ${renderStats()}
         </table>
         
