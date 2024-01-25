@@ -173,7 +173,7 @@ function generatePokemonCardHTML(pokemon) {
                 <img src="${pokemon['sprites']['other']['dream_world']['front_default']}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
-            <div class="pokemon-card-bottom">
+            <div class="pokemon-card-bottom d-flex flex-column">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeInfoTag('aboutTab')">About</a>
@@ -188,7 +188,7 @@ function generatePokemonCardHTML(pokemon) {
                             <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>
-                    <div id="pokemonInfo">
+                    <div class="d-flex flex-column p-3 gap-2" id="pokemonInfo">
                         ${generateAboutHTML()}
                     </div>
             </div>
@@ -211,32 +211,60 @@ function changeInfoTag(id) {
 
 function showInfo(htmlFunc) {
     let pokeInfo = document.getElementById('pokemonInfo');
+    pokeInfo.innerHTML = '';
     pokeInfo.innerHTML = htmlFunc;
 }
 
 function generateBaseStatsHTML() {
     return /*html*/`
-        <table>
-            ${renderStatTable()}
+        <table class="table table-striped">
+            ${renderStats()}
         </table>
+        
     `
 }
 
 function generateAboutHTML() {
     return /*html*/`
-         <i>${currentInfo['flavor_text_entries'][1]['flavor_text']}</i>
+        <h5>Pokedex Entry</h4>
+        <i>"${currentInfo['flavor_text_entries'][1]['flavor_text']}"</i>
+        <div class="d-flex flex-column w-75">
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <b>Base happiness: </b>${currentInfo['base_happiness']}
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <b>Base experience: </b>${currentPokemon['base_experience']}
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <b>Capture rate: </b>${currentInfo['capture_rate']}
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <b>Height: </b>${currentPokemon['height'] / 10}m
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <b>Weight: </b>${currentPokemon['weight'] / 10}kg
+            </div>
+        </div>
+        
     `
 }
 
-function renderStatTable() {
-    let htmlText;
+function renderStats() {
+    let htmlText = '';
     for (let i = 0; i < currentPokemon['stats'].length; i++) {
         let stat = currentPokemon['stats'][i];
         htmlText += /*html*/`
             <tr>
-                <td>${stat['stat']['name']}</td>
+                <td><b>${stat['stat']['name']}</b></td>
                 <td>${stat['base_stat']}</td>
-            </tr>
+                <td>
+                <div class="progress w-100 bg-secondary">
+                <div class="progress-bar ${currentPokemon['types'][0]['type']['name']} custom-progress-bar" role="progressbar" style="width: ${stat['base_stat']}%;">
+                        </div>
+                </div>
+
+                </td>
+            </tr>  
         `;
     }
     return htmlText;
