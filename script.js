@@ -2,6 +2,7 @@
 let pokemonList = [];
 let currentPokemon;
 let currentInfo;
+let currentEvolutionChain;
 let limit = 25;
 let offset = 0;
 let currentPage = 1;
@@ -22,6 +23,15 @@ async function loadPokemon() {
         } else {
             alert('It seems like something went wrong, could not find the pokemon')
         }
+    }
+}
+
+function renderPokemon() {
+    let content = document.getElementById('content');
+    content.innerHTML = '';
+    for (let i = 0; i < pokemonList.length; i++) {
+        let pokemon = pokemonList[i];
+        content.innerHTML += generateOverviewHTML(pokemon, i);
     }
 }
 
@@ -90,13 +100,78 @@ function doNotClose(event) {
     event.stopPropagation();
 }
 
-function renderPokemon() {
-    let content = document.getElementById('content');
-    content.innerHTML = '';
-    for (let i = 0; i < pokemonList.length; i++) {
-        let pokemon = pokemonList[i];
-        content.innerHTML += generateOverviewHTML(pokemon, i);
+function openPokemonCard(index) {
+    let popup = document.getElementById('popup');
+    currentPokemon = pokemonList[index];
+    popup.classList.remove('d-none');
+    renderPokemonCard(currentPokemon, index);
+}
+
+async function renderPokemonCard(pokemon, index) {
+    let popup = document.getElementById('popup');
+    await getPokemonDetails(index);
+    await getEvolutionData();
+    popup.innerHTML = '';
+    popup.innerHTML += generatePokemonCardHTML(pokemon);
+}
+
+async function getPokemonDetails(index) {
+    let id = index + 1
+    let url = `https://pokeapi.co/api/v2/pokemon-species/${id}`
+    let response = await fetch(url);
+    if (response.ok) {
+        let pokemonInfo = await response.json();
+        currentInfo = pokemonInfo;
+        return pokemonInfo;
+    } else {
+        alert('It seems like something went wrong, could not find the pokemon')
+        return null;
     }
+}
+
+async function getEvolutionData() {
+    let url = currentInfo['evolution_chain']['url'];
+    let response = await fetch(url);
+    if (response.ok) {
+        let evolutionInfo = await response.json();
+        currentEvolutionChain = evolutionInfo;
+        return evolutionInfo;
+    } else {
+        alert('It seems like something went wrong, could not find the pokemon')
+        return null;
+    }
+}
+
+function changeInfoTag(id) {
+    let specificTab = document.getElementById(id);
+    let tabs = document.getElementsByClassName('nav-link');
+    for (let i = 0; i < tabs.length; i++) {
+        let tab = tabs[i];
+        tab.classList.remove('active');
+        tab.removeAttribute('aria-current');
+    }
+    specificTab.classList.add('active');
+    specificTab.setAttribute('aria-current', 'page');
+
+    if (id == 'statsTab') {
+        startProgressBarAnimation()
+    }
+}
+
+function startProgressBarAnimation() {
+    setTimeout(() => {
+        let progressBars = document.querySelectorAll('.progress-bar-animated');
+        for (let i = 0; i < progressBars.length; i++) {
+            const progressBar = progressBars[i];
+            progressBar.style.width = `${currentPokemon['stats'][i]['base_stat']}%`;
+        }
+    }, 100);
+}
+
+function showInfo(htmlFunc) {
+    let pokeInfo = document.getElementById('pokemonInfo');
+    pokeInfo.innerHTML = '';
+    pokeInfo.innerHTML = htmlFunc;
 }
 
 function typeHTML(pokemon) {
@@ -124,38 +199,6 @@ function generateOverviewHTML(pokemon, i) {
     </div>
 `;
 }
-// Soll umgeschrieben werden und eine render Funktion implementiert werden, die Infos aus currentInfos zieht
-//
-async function openPokemonCard(index) {
-    let popup = document.getElementById('popup');
-    // let pokemonInfo = await getPokemonDetails('pokemon-species', index);
-    await getPokemonDetails('pokemon-species', index);
-    currentPokemon = pokemonList[index];
-    popup.classList.remove('d-none');
-    renderPokemonCard(currentPokemon);
-}
-// Brauche eine Funktion renderInfo(), die die Info Felder befüllt, nachdem renderCard ausgeführt wurde
-// 
-function renderPokemonCard(pokemon) {
-    let popup = document.getElementById('popup');
-    popup.innerHTML = '';
-    popup.innerHTML += generatePokemonCardHTML(pokemon);
-}
-
-async function getPokemonDetails(param, index) {
-    let id = index + 1
-    let url = `https://pokeapi.co/api/v2/${param}/${id}`
-    let response = await fetch(url);
-    if (response.ok) {
-        let pokemonInfo = await response.json();
-        currentInfo = pokemonInfo;
-        return pokemonInfo;
-    } else {
-        alert('It seems like something went wrong, could not find the pokemon')
-        return null;
-    }
-}
-
 
 function generatePokemonCardHTML(pokemon) {
     return /*html*/`
@@ -179,9 +222,9 @@ function generatePokemonCardHTML(pokemon) {
                             <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeInfoTag('aboutTab')">About</a>
                         </li>
                         <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeInfoTag('statsTab')">
-                            <a id="statsTab" class="nav-link" href="#">Base Stats</a>
+                            <a id="statsTab" class="nav-link" href="#">Stats</a>
                         </li>
-                        <li class="nav-item" onclick="changeInfoTag('evolutionTab')">
+                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeInfoTag('evolutionTab')">
                             <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
                         <li class="nav-item" onclick="changeInfoTag('movesTab')">
@@ -197,59 +240,16 @@ function generatePokemonCardHTML(pokemon) {
     `
 }
 
-function changeInfoTag(id) {
-    let specificTab = document.getElementById(id);
-    let tabs = document.getElementsByClassName('nav-link');
-    for (let i = 0; i < tabs.length; i++) {
-        let tab = tabs[i];
-        tab.classList.remove('active');
-        tab.removeAttribute('aria-current');
-    }
-    specificTab.classList.add('active');
-    specificTab.setAttribute('aria-current', 'page');
-}
-
-function showInfo(htmlFunc) {
-    let pokeInfo = document.getElementById('pokemonInfo');
-    pokeInfo.innerHTML = '';
-    pokeInfo.innerHTML = htmlFunc;
-}
-
 function generateBaseStatsHTML() {
     return /*html*/`
         <table class="table">
-            ${renderStats()}
+            ${renderStatsHTML()}
         </table>
         
     `
 }
 
-function generateAboutHTML() {
-    return /*html*/`
-        <h5>Pokedex Entry</h4>
-        <i>"${currentInfo['flavor_text_entries'][1]['flavor_text']}"</i>
-        <div class="d-flex flex-column w-75">
-            <div class="d-flex justify-content-between align-items-center gap-3">
-                <b>Base happiness: </b>${currentInfo['base_happiness']}
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-                <b>Base experience: </b>${currentPokemon['base_experience']}
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-                <b>Capture rate: </b>${currentInfo['capture_rate']}
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-                <b>Height: </b>${currentPokemon['height'] / 10}m
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-                <b>Weight: </b>${currentPokemon['weight'] / 10}kg
-            </div>
-        </div>
-        
-    `
-}
-
-function renderStats() {
+function renderStatsHTML() {
     let htmlText = '';
     for (let i = 0; i < currentPokemon['stats'].length; i++) {
         let stat = currentPokemon['stats'][i];
@@ -259,7 +259,7 @@ function renderStats() {
                 <td>${stat['base_stat']}</td>
                 <td>
                 <div class="progress w-100 bg-secondary">
-                <div class="progress-bar ${currentPokemon['types'][0]['type']['name']} custom-progress-bar" role="progressbar" style="width: ${stat['base_stat']}%;">
+                <div class="progress-bar progress-bar-animated ${currentPokemon['types'][0]['type']['name']}" role="progressbar" style="width: 0%;">
                         </div>
                 </div>
 
@@ -269,4 +269,68 @@ function renderStats() {
     }
     return htmlText;
 }
+
+function generateAboutHTML() {
+    return /*html*/`
+        <div class="d-flex flex-column py-2 px-5 gap-3">
+            <h4>Pokedex Entry</h4>
+            <i>"${currentInfo['flavor_text_entries'][1]['flavor_text']}"</i>
+            <div class="d-flex flex-column fs-6 w-75">
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <b>Base happiness: </b>${currentInfo['base_happiness']}
+                </div>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <b>Base experience: </b>${currentPokemon['base_experience']}
+                </div>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <b>Capture rate: </b>${currentInfo['capture_rate']}
+                </div>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <b>Height: </b>${currentPokemon['height'] / 10}m
+                </div>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <b>Weight: </b>${currentPokemon['weight'] / 10}kg
+                </div>
+            </div>
+        </div>
+    `
+}
+// Funktioniert noch nicht, weil sie im Falle von 2 Evolutionen keinen thirdKey deklarieren kann
+// Vielleicht kann man es über einen Array lösen
+function generateEvolutionHTML() {
+    let htmlText = '';
+    let firstKey = currentEvolutionChain['chain']['species']['name']
+    let secondKey = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
+    let firstLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolution_details'][0]['min_level'];
+    let thirdKey = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+    let secondLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['evolution_details'][0]['min_level'];
+    htmlText = /*html*/`
+        <div>
+            <h4>Evolution Chain</h4>
+            <ul>
+                <li>${firstKey}</li>
+                <li>${secondKey} at Level ${firstLevelChange}</li>
+                <li>${thirdKey} at Level ${secondLevelChange}</li>
+            </ul>
+        </div>
+    `;
+    return htmlText;
+    // if (typeof thirdKey == 'undefined') {
+    //     return /*html*/`
+    //         <div>
+    //         <h4>Evolution Chain</h4>
+    //         <ul>
+    //             <li>${firstKey}</li>
+    //             <li>${secondKey} at Level ${firstLevelChange}</li>
+    //         </ul>
+    //     </div>
+    //     `
+    // } else {
+    //     return htmlText;
+    // }
+}
+
+
+
+
 

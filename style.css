@@ -248,19 +248,28 @@ main {
 }
 
 .nav-tabs {
-  justify-content: center;
+  justify-content: space-between;
   border-color: #9a9c9f;
   --bs-nav-tabs-link-active-border-color: #9a9c9f #9a9c9f #fff;
 }
 
 .nav-item .nav-link {
   color: black;
-  padding-top: 16px;
+  padding-top: 16px 16px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.nav-item {
+  width: 25%;
+  text-align: center;
 }
 
 
 .nav-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
 
 td {
