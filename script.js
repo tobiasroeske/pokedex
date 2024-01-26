@@ -100,18 +100,19 @@ function doNotClose(event) {
     event.stopPropagation();
 }
 
-function openPokemonCard(index) {
+async function openPokemonCard(index) {
     let popup = document.getElementById('popup');
     currentPokemon = pokemonList[index];
     popup.classList.remove('d-none');
-    renderPokemonCard(currentPokemon, index);
+    await renderPokemonCard(currentPokemon, index);
 }
 
 async function renderPokemonCard(pokemon, index) {
     let popup = document.getElementById('popup');
+    popup.innerHTML = '';
     await getPokemonDetails(index);
     await getEvolutionData();
-    popup.innerHTML = '';
+    
     popup.innerHTML += generatePokemonCardHTML(pokemon);
 }
 
@@ -302,10 +303,11 @@ function generateEvolutionHTML() {
     let firstKey = currentEvolutionChain['chain']['species']['name']
     let secondKey = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
     let firstLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolution_details'][0]['min_level'];
-    let thirdKey = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-    let secondLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['evolution_details'][0]['min_level'];
-    htmlText = /*html*/`
-        <div>
+    if (currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'].length > 0) {
+        let thirdKey = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+        let secondLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['evolution_details'][0]['min_level'];
+        htmlText = /*html*/`
+            <div>
             <h4>Evolution Chain</h4>
             <ul>
                 <li>${firstKey}</li>
@@ -313,24 +315,18 @@ function generateEvolutionHTML() {
                 <li>${thirdKey} at Level ${secondLevelChange}</li>
             </ul>
         </div>
-    `;
-    return htmlText;
-    // if (typeof thirdKey == 'undefined') {
-    //     return /*html*/`
-    //         <div>
-    //         <h4>Evolution Chain</h4>
-    //         <ul>
-    //             <li>${firstKey}</li>
-    //             <li>${secondKey} at Level ${firstLevelChange}</li>
-    //         </ul>
-    //     </div>
-    //     `
-    // } else {
-    //     return htmlText;
-    // }
+        `;
+        return htmlText;
+    } else {
+        htmlText = /*html*/`
+            <div>
+            <h4>Evolution Chain</h4>
+            <ul>
+                <li>${firstKey}</li>
+                <li>${secondKey} at Level ${firstLevelChange}</li>
+            </ul>
+        </div>
+        `;
+        return htmlText;
+    }
 }
-
-
-
-
-
