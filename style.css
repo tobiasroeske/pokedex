@@ -250,12 +250,19 @@ main {
   height: auto;
   min-height: 385px;
   font-size: 16px;
+  overflow: auto;
 }
 
 .nav-tabs {
   justify-content: space-between;
   border-color: #9a9c9f;
   --bs-nav-tabs-link-active-border-color: #9a9c9f #9a9c9f #fff;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  font-weight: 700;
 }
 
 .nav-item .nav-link {

@@ -228,7 +228,7 @@ function generatePokemonCardHTML(pokemon) {
                         <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeInfoTag('evolutionTab')">
                             <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
-                        <li class="nav-item" onclick="changeInfoTag('movesTab')">
+                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeInfoTag('movesTab')">
                             <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>
@@ -333,5 +333,33 @@ function generateEvolutionHTML() {
             </ul>
         </div>
     `;
+    return htmlText;
+}
+
+function generateMovesHtml() {
+    let htmlText = '';
+    htmlText = /*html*/`
+        <div class="d-flex flex-column py-2 px-5">
+            <ul>
+                ${renderMoves()}
+            </ul>
+        </div>
+    `;
+    return htmlText;
+}
+
+function renderMoves() {
+    let moves = currentPokemon['moves'];
+    let htmlText = ''
+    for (let i = 0; i < moves.length; i++) {
+        const move = moves[i];
+        let moveName = move['move']['name'];
+        let levelLearnedAt = move['version_group_details'][0]['level_learned_at']
+        if (move['version_group_details'][0]['move_learn_method']['name'] == 'level-up'){
+            htmlText += /*html*/`
+                <li><b>${capitalizeFirstLetter(moveName)}</b> learned at <b>Lvl ${levelLearnedAt}</b></li>
+            `;
+        }
+    }
     return htmlText;
 }
