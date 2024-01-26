@@ -40,6 +40,7 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 64px;
+  height: 100vh;
 }
 
 .btn {
@@ -53,6 +54,7 @@ main {
   justify-content: center;
   flex-wrap: wrap;
   gap: 16px;
+  flex: 1;
 }
 
 .poke-container-small {
@@ -156,6 +158,7 @@ main {
   display: flex;
   justify-content: center;
   gap: 24px;
+  padding-bottom: 64px;
 }
 .page-btns {
   display: flex;
@@ -296,4 +299,10 @@ td:nth-child(2) {
 .custom-progress-bar {
   width: 0;
   transition: width 0.5s ease;
+}
+
+.spinner-border {
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.3));
 }

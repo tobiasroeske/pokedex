@@ -8,8 +8,23 @@ let offset = 0;
 let currentPage = 1;
 
 async function init() {
+    generateLoadingScreen('content');
     await loadPokemon();
     renderPokemon();
+}
+
+function generateLoadingScreen(id) {
+    let element = document.getElementById(id);
+    element.innerHTML = '';
+    element.innerHTML = /*html*/`
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="text-light">Loading ... </h2>
+            <div class="spinner-border spinner-border-md text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        
+    `
 }
 
 async function loadPokemon() {
@@ -28,11 +43,13 @@ async function loadPokemon() {
 
 function renderPokemon() {
     let content = document.getElementById('content');
-    content.innerHTML = '';
+    let htmlText = '';
     for (let i = 0; i < pokemonList.length; i++) {
         let pokemon = pokemonList[i];
-        content.innerHTML += generateOverviewHTML(pokemon, i);
+        htmlText += generateOverviewHTML(pokemon, i);
     }
+    content.innerHTML = '';
+    content.innerHTML = htmlText;
 }
 
 async function showNextPage() {
@@ -101,6 +118,7 @@ function doNotClose(event) {
 }
 
 async function openPokemonCard(index) {
+    generateLoadingScreen('popup');
     let popup = document.getElementById('popup');
     currentPokemon = pokemonList[index];
     popup.classList.remove('d-none');
@@ -109,11 +127,13 @@ async function openPokemonCard(index) {
 
 async function renderPokemonCard(pokemon) {
     let popup = document.getElementById('popup');
-    popup.innerHTML = '';
+    let htmlText = ''
     await getPokemonDetails();
-    
-    popup.innerHTML += generatePokemonCardHTML(pokemon);
+    htmlText += generatePokemonCardHTML(pokemon);
+    popup.innerHTML = '';
+    popup.innerHTML = htmlText;
     await getEvolutionData();
+    
 }
 
 async function getPokemonDetails() {
@@ -173,6 +193,16 @@ function showInfo(htmlFunc) {
     let pokeInfo = document.getElementById('pokemonInfo');
     pokeInfo.innerHTML = '';
     pokeInfo.innerHTML = htmlFunc;
+}
+
+function sortMoves(){
+    let moves = currentPokemon['moves'];
+    moves.sort((a, b) => {
+        let levelA = a['version_group_details'][0]['level_learned_at'];
+        let levelB = b['version_group_details'][0]['level_learned_at'];
+        return levelA - levelB; // Falls negativer Wert rauskommt, wird b vor a sortiert, falls
+    });                           // positiver Wert, wird b nach a sortiert
+    return moves;    
 }
 
 function typeHTML(pokemon) {
@@ -341,25 +371,27 @@ function generateMovesHtml() {
     htmlText = /*html*/`
         <div class="d-flex flex-column py-2 px-5">
             <ul>
-                ${renderMoves()}
+                ${renderMovesHTML()}
             </ul>
         </div>
     `;
     return htmlText;
 }
 
-function renderMoves() {
-    let moves = currentPokemon['moves'];
-    let htmlText = ''
+function renderMovesHTML() {
+    let moves = sortMoves();
+    let htmlText = '';
     for (let i = 0; i < moves.length; i++) {
-        const move = moves[i];
+        let move = moves[i];
         let moveName = move['move']['name'];
-        let levelLearnedAt = move['version_group_details'][0]['level_learned_at']
-        if (move['version_group_details'][0]['move_learn_method']['name'] == 'level-up'){
+        let levelLearnedAt = move['version_group_details'][0]['level_learned_at'];
+
+        if (move['version_group_details'][0]['move_learn_method']['name'] === 'level-up') {
             htmlText += /*html*/`
                 <li><b>${capitalizeFirstLetter(moveName)}</b> learned at <b>Lvl ${levelLearnedAt}</b></li>
             `;
         }
     }
+
     return htmlText;
 }
