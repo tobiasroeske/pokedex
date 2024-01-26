@@ -299,34 +299,39 @@ function generateAboutHTML() {
 // Funktioniert noch nicht, weil sie im Falle von 2 Evolutionen keinen thirdKey deklarieren kann
 // Vielleicht kann man es über einen Array lösen
 function generateEvolutionHTML() {
-    let htmlText = '';
-    let firstKey = currentEvolutionChain['chain']['species']['name']
-    let secondKey = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
-    let firstLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolution_details'][0]['min_level'];
-    if (currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'].length > 0) {
-        let thirdKey = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-        let secondLevelChange = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['evolution_details'][0]['min_level'];
-        htmlText = /*html*/`
-            <div>
+    let chain = currentEvolutionChain['chain'];
+    let firstKey = chain['species']['name'];
+    let evolvesTo = chain['evolves_to'];
+    let htmlText = /*html*/`
+        <div class="d-flex flex-column py-2 px-5">
             <h4>Evolution Chain</h4>
             <ul>
-                <li>${firstKey}</li>
-                <li>${secondKey} at Level ${firstLevelChange}</li>
-                <li>${thirdKey} at Level ${secondLevelChange}</li>
-            </ul>
-        </div>
+                <li>${capitalizeFirstLetter(firstKey)}</li>
+    `;
+    if (evolvesTo.length > 0) {
+        let secondKey = evolvesTo[0]['species']['name'];
+        let firstLevelChange = evolvesTo[0]['evolution_details'][0]['min_level'];
+        htmlText += /*html*/`
+            <li>${capitalizeFirstLetter(secondKey)} at Level ${firstLevelChange}</li>
         `;
-        return htmlText;
-    } else {
-        htmlText = /*html*/`
-            <div>
-            <h4>Evolution Chain</h4>
-            <ul>
-                <li>${firstKey}</li>
-                <li>${secondKey} at Level ${firstLevelChange}</li>
-            </ul>
-        </div>
-        `;
-        return htmlText;
+        if (evolvesTo[0]['evolves_to'].length > 0) {
+            let thirdKey = evolvesTo[0]['evolves_to'][0]['species']['name'];
+            let secondLevelChange = evolvesTo[0]['evolves_to'][0]['evolution_details'][0]['min_level'];
+            htmlText += /*html*/`
+                <li>${capitalizeFirstLetter(thirdKey)} at Level ${secondLevelChange}</li>
+            `;
+        }
     }
+    htmlText += /*html*/`
+            </ul>
+            <h5>Evolution Infos</h5>
+            <ul>
+                <li>Growth rate: ${currentInfo['growth_rate']['name']}</li>
+                <li>Gender difference: ${currentInfo['has_gender_difference'] ? 'Yes' : 'No'}</li>
+                <li>Legendary: ${currentInfo['is_legendary']? 'Yes' : 'No'}</li>
+                <li>Mythical: ${currentInfo['is_mythical']? 'Yes':'No'}</li>
+            </ul>
+        </div>
+    `;
+    return htmlText;
 }
