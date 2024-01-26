@@ -104,21 +104,21 @@ async function openPokemonCard(index) {
     let popup = document.getElementById('popup');
     currentPokemon = pokemonList[index];
     popup.classList.remove('d-none');
-    await renderPokemonCard(currentPokemon, index);
+    await renderPokemonCard(currentPokemon);
 }
 
-async function renderPokemonCard(pokemon, index) {
+async function renderPokemonCard(pokemon) {
     let popup = document.getElementById('popup');
     popup.innerHTML = '';
-    await getPokemonDetails(index);
-    await getEvolutionData();
+    await getPokemonDetails();
     
     popup.innerHTML += generatePokemonCardHTML(pokemon);
+    await getEvolutionData();
 }
 
-async function getPokemonDetails(index) {
-    let id = index + 1
-    let url = `https://pokeapi.co/api/v2/pokemon-species/${id}`
+async function getPokemonDetails() {
+    let url = currentPokemon['species']['url'];
+    
     let response = await fetch(url);
     if (response.ok) {
         let pokemonInfo = await response.json();
