@@ -109,8 +109,14 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function closeCard() {
-    document.getElementById('popup').classList.add('d-none');
+function toggleVisibility (id, className) {
+    document.getElementById(id).classList.toggle(className);
+}
+
+
+function changeHeartIcon () {
+    toggleVisibility('heart', 'd-none');
+    toggleVisibility('heartFilled', 'd-none');
 }
 
 function doNotClose(event) {
@@ -119,9 +125,8 @@ function doNotClose(event) {
 
 async function openPokemonCard(index) {
     generateLoadingScreen('popup');
-    let popup = document.getElementById('popup');
     currentPokemon = pokemonList[index];
-    popup.classList.remove('d-none');
+    toggleVisibility('popup', 'd-none')
     await renderPokemonCard(currentPokemon);
 }
 

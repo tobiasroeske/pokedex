@@ -22,6 +22,12 @@ header {
   align-items: center;
   box-shadow: 0px 2px 8px 4px rgba(0, 0, 0, 0.1);
   padding: 16px 48px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  background-color: rgb(242,242,242);
 }
 
 form {
@@ -36,11 +42,44 @@ header img:hover {
 }
 
 main {
+  padding-top: 82px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 64px;
   height: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  justify-content: flex-end;
+  position: sticky;
+  right: 0; 
+  top: 82px;
+  z-index: 25;
+  
+}
+
+.dropdown-list {
+  width: 400px;
+  height: 50vh;
+  border-bottom-left-radius: 16px;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.1);
+  background-color: rgb(242,242,242);
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 24px;
+  font-weight: 700;
+  font-size: 20px;
+  position: fixed;
+  top: 82px;
+}
+
+.dropdown-list li:hover {
+  cursor: pointer;
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 .btn {
@@ -191,7 +230,7 @@ main {
 .popup-card {
   width: 30%;
   min-width: 400px;
-  height: 90vh;
+  height: 80vh;
   z-index: 9;
   margin-top: 0;
   display: flex;
@@ -210,7 +249,17 @@ main {
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   /* padding-bottom: 64px; */
-  gap: 24px;
+}
+
+.icon {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.icon:hover {
+  filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.5));
 }
 
 .pokemon-card-img {

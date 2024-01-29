@@ -26,9 +26,20 @@
             <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control">
             <button class="btn btn-light">Search</button>
         </form>
-        <img src="img/menu.png" alt="">
+        <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')">
     </header>
-    <main>
+    <div class="sidebar d-none" id="sidebar">
+        <ul class="dropdown-list">
+            <li>Kanto</li>
+            <li>Johto</li>
+            <li>Johto</li>
+            <li>Johto</li>
+            <li>Johto</li>
+            <li>Johto</li>
+            <li>Johto</li>
+        </ul>
+    </div>
+    <main onclick="toggleMenu()">
         <h1>Pokedex</h1>
         <div class="content" id="content">
 

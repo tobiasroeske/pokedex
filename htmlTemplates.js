@@ -28,10 +28,21 @@ function generatePokemonCardHTML(pokemon) {
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
+                <div class="d-flex justify-content-between px-5 pt-5 w-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-arrow-left" viewBox="0 0 16 16" onclick="toggleVisibility('popup', 'd-none'">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-heart" viewBox="0 0 16 16" onclick="changeHeartIcon()" id="heart">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="d-none icon bi bi-heart-fill" viewBox="0 0 16 16" onclick="changeHeartIcon()" id="heartFilled">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                    </svg>
+                </div>
                 <div class="pokemon-overview">
                     <div class="name-type">
                      <h2>${capitalizeFirstLetter(pokemon['name'])}</h2>
-                        <div>
+                        <div class="d-flex gap-2">
                             ${typeHTML(pokemon)}
                         </div>
                     </div>
@@ -40,7 +51,7 @@ function generatePokemonCardHTML(pokemon) {
                 <img src="${pokemon['sprites']['other']['dream_world']['front_default']}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
-            <div class="pokemon-card-bottom d-flex flex-column">
+            <div class="pokemon-card-bottom d-flex flex-column" onclick="doNotClose(event)">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeInfoTag('aboutTab')">About</a>
@@ -119,8 +130,7 @@ function generateAboutHTML() {
         </div>
     `
 }
-// Funktioniert noch nicht, weil sie im Falle von 2 Evolutionen keinen thirdKey deklarieren kann
-// Vielleicht kann man es über einen Array lösen
+
 function generateEvolutionHTML() {
     let chain = currentEvolutionChain['chain'];
     let firstKey = chain['species']['name'];
