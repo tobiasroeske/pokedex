@@ -31,41 +31,30 @@
     <div class="sidebar d-none" id="sidebar">
         <ul class="list-group list-group-flush dropdown-list bg-light">
             <h2>Pokedex Regions</h2>
-            <li onclick="init(2); changeTag('kanto', 'list-group-item'); showPokedexRegion('kanto')" class="list-group-item" id="kanto">Kanto</li>
-            <li onclick="init(3); changeTag('johto', 'list-group-item'); showPokedexRegion('johto')" class="list-group-item" id="johto">Johto</li>
-            <li onclick="init(4); changeTag('hoenn', 'list-group-item'); showPokedexRegion('hoenn')" class="list-group-item" id="hoenn">Hoenn</li>
-            <li onclick="init(5); changeTag('sinnoh', 'list-group-item'); showPokedexRegion('sinnoh')" class="list-group-item" id="sinnoh">Sinnoh</li> 
-            <li onclick="init(8); changeTag('unova', 'list-group-item'); showPokedexRegion('unova')" class="list-group-item" id="unova">Unova</li> 
-            <li onclick="init(11); changeTag('conquestGallery', 'list-group-item'); showPokedexRegion('conquestGallery')" class="list-group-item" id="conquestGallery">Conquest Gallery</li> 
-            <li onclick="init(12); changeTag('kalosCentral', 'list-group-item'); showPokedexRegion('kalosCentral')" class="list-group-item" id="kalosCentral">Kalos Central</li> 
-            <li onclick="init(13); changeTag('kalosCoastal', 'list-group-item'); showPokedexRegion('kalosCoastal')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li> 
-            <li onclick="init(14); changeTag('kalosMountain', 'list-group-item'); showPokedexRegion('kalosMountain')" class="list-group-item" id="kalosMountain">Kalos Mountain</li> 
-            <li onclick="init(16); changeTag('alola', 'list-group-item'); showPokedexRegion('alola')" class="list-group-item" id="alola">Alola</li> 
-            <li onclick="init(17); changeTag('melemele', 'list-group-item'); showPokedexRegion('melemele')" class="list-group-item" id="melemele">Melemele</li> 
-            <li onclick="init(18); changeTag('akala', 'list-group-item'); showPokedexRegion('akala')" class="list-group-item" id="akala">Akala</li> 
-            <li onclick="init(19); changeTag('ulaula', 'list-group-item'); showPokedexRegion('ulaula')" class="list-group-item" id="ulaula">Ulaula</li> 
-            <li onclick="init(20); changeTag('poni', 'list-group-item'); showPokedexRegion('poni')" class="list-group-item" id="poni">Poni</li> 
+            <li onclick="init(2); renderNewPokedex('kanto')" class="list-group-item" id="kanto">Kanto</li>
+            <li onclick="init(3); renderNewPokedex('johto')" class="list-group-item" id="johto">Johto</li>
+            <li onclick="init(4); renderNewPokedex('hoenn')" class="list-group-item" id="hoenn">Hoenn</li>
+            <li onclick="init(5); renderNewPokedex('sinnoh')" class="list-group-item" id="sinnoh">Sinnoh</li> 
+            <li onclick="init(8); renderNewPokedex('unova')" class="list-group-item" id="unova">Unova</li> 
+            <li onclick="init(11); renderNewPokedex('conquestGallery')" class="list-group-item" id="conquestGallery">Conquest Gallery</li> 
+            <li onclick="init(12); renderNewPokedex('kalosCentral')" class="list-group-item" id="kalosCentral">Kalos Central</li> 
+            <li onclick="init(13); renderNewPokedex('kalosCoastal')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li> 
+            <li onclick="init(14); renderNewPokedex('kalosMountain')" class="list-group-item" id="kalosMountain">Kalos Mountain</li> 
+            <li onclick="init(16); renderNewPokedex('alola')" class="list-group-item" id="alola">Alola</li> 
+            <li onclick="init(17); renderNewPokedex('melemele')" class="list-group-item" id="melemele">Melemele</li> 
+            <li onclick="init(18); renderNewPokedex('akala')" class="list-group-item" id="akala">Akala</li> 
+            <li onclick="init(19); renderNewPokedex('ulaula')" class="list-group-item" id="ulaula">Ulaula</li> 
+            <li onclick="init(20); renderNewPokedex('poni')" class="list-group-item" id="poni">Poni</li> 
         </ul>
     </div>
-    <main id="mainContainer">
+    <main id="mainContainer" onclick="hideMenu()">
         <h1 id="pokedexRegion">Pokedex der Kanto Region</h1>
         <div class="content" id="content">
 
         </div>
 
         <div class="pages-container mb-5" id="pages">
-            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()"><img
-                    src="img/arrow-left.svg" alt="" class="icon"></button>
-            <div class="page-btns">
-                <button id="pageButton1" class="btn btn-light active-page" onclick="changePage(0, 25)">1</button>
-                <button id="pageButton2" class="btn btn-light" onclick="changePage(25, 50)">2</button>
-                <button id="pageButton3" class="btn btn-light" onclick="changePage(50, 75)">3</button>
-                <button id="pageButton4" class="btn btn-light" onclick="changePage(75, 100)">4</button>
-                <button id="pageButton5" class="btn btn-light" onclick="changePage(100, 125)">5</button>
-                <button id="pageButton6" class="btn btn-light" onclick="changePage(125, 151)">6</button>
-            </div>
-
-            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()"><img src="img/arrow-right.svg" alt="" class="icon"></button>
+            
         </div>
     </main>
     <div class="popup d-none" id="popup" onclick="toggleVisibility('popup', 'd-none')">

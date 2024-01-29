@@ -205,7 +205,7 @@ main {
   display: flex;
   justify-content: space-around;
   gap: 24px;
-  max-width: 350px;
+  max-width: 650px;
 }
 
 .d-none {

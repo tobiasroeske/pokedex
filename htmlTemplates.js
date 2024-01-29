@@ -1,7 +1,3 @@
-function showPokedexRegion(id) {
-    let headlineContent = document.getElementById(id).innerHTML;
-    document.getElementById('pokedexRegion').innerHTML = `Pokedex der ${headlineContent} Region`
-}
 
 function typeHTML(pokemon) {
     htmlText = '';
@@ -31,6 +27,34 @@ function generateOverviewHTML(pokemon, i) {
 `;
 }
 
+function generatePageButtons() {
+    let pagesContainer = document.getElementById('pages');
+    pagesContainer.innerHTML = /*html*/`
+        <div class="pages-container mb-5" id="pages">
+            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()">
+                <img src="img/arrow-left.svg" alt="" class="icon">
+            </button>
+            <div class="page-btns">
+                ${renderPageButtonsHTML()}
+            </div>      
+            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()">
+                <img src="img/arrow-right.svg" alt="" class="icon">
+            </button>
+        </div>
+    `;
+}
+
+function renderPageButtonsHTML() {
+    let numberOfPages = Math.ceil(currentPokedexList.length / 25);
+    let htmlText = '';
+    for (let i = 1; i <= numberOfPages; i++) {
+        htmlText += /*html*/`
+            <button id="pageButton${i}" class="btn btn-light" onclick="changePage(${i})">${i}</button>
+        `;
+    } 
+    return htmlText;
+}
+
 function generatePokemonCardHTML(pokemon) {
     let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
     let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
@@ -38,7 +62,7 @@ function generatePokemonCardHTML(pokemon) {
         <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
                 <div class="d-flex justify-content-between px-5 pt-5 w-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-arrow-left" viewBox="0 0 16 16" onclick="toggleVisibility('popup', 'd-none'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-arrow-left" viewBox="0 0 16 16" onclick="toggleVisibility('popup', 'd-none')">
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                     </svg>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-heart" viewBox="0 0 16 16" onclick="changeHeartIcon()" id="heart">

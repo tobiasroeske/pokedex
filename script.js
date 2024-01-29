@@ -13,6 +13,7 @@ async function init(pokedexNumber) {
     generateLoadingScreen('content');
     await loadPokedex(pokedexNumber);
     await renderPokemon();
+    generatePageButtons();
 }
 
 function generateLoadingScreen(id) {
@@ -44,7 +45,7 @@ async function loadPokedex(number) {
 }
 
 async function renderPokemon() {
-    let content = document.getElementById('content');
+    let index = 0;
     let htmlText = '';
     let url = `https://pokeapi.co/api/v2/pokemon/`
     pokemonList = [];
@@ -53,59 +54,59 @@ async function renderPokemon() {
         if (response.ok) {
             let pokemon = await response.json();
             pokemonList.push(pokemon);
-            htmlText += generateOverviewHTML(pokemon, i);
+            htmlText += generateOverviewHTML(pokemon, index);
+            index++;
         }
     }
-    content.innerHTML = htmlText;
+    document.getElementById('content').innerHTML = htmlText;
+}
+
+function renderNewPokedex(id) {
+    let headlineContent = document.getElementById(id).innerHTML;
+    document.getElementById('pokedexRegion').innerHTML = `Pokedex der ${headlineContent} Region`
+    resetOffsetAndLimit();
+    toggleVisibility('sidebar', 'd-none');
+    changeTag(id, 'list-group-item');
+}
+
+function resetOffsetAndLimit () {
+    offset = 0;
+    limit = 25;
 }
 
 async function showNextPage() {
-    if (limit < 125) {
-        offset += 25;
-        limit += 25;
-        await init();
-    } else {
-        offset = 125;
-        limit = 151;
-        await init();
-        limit = 150;
-    }
-    updatePageButton(limit)
+    currentPage++;
+    changePage(currentPage);
 }
 
 async function showPreviousPage() {
-    if (limit > 50) {
-        offset -= 25;
-        limit -= 25;
-        await init();
-    } else {
-        offset -= 25;
-        limit -= 25;
-        await init();
+    currentPage--
+    changePage(currentPage);
+}
+
+async function changePage(page) {
+    currentPage = page;
+    offset = (page - 1) * 25;
+    limit = page * 25;
+    if (limit > currentPokedexList.length) {
+        limit = currentPokedexList.length;
     }
-    updatePageButton(limit);
+    let currentPokedexId = currentPokedex['id'];
+    await init(currentPokedexId);
+    updatePageButtons();
 }
 
-async function changePage(start, end) {
-    offset = start;
-    limit = end;
-    updatePageButton(end);
-    await init();
-}
-
-function updatePageButton(end) {
+function updatePageButtons() {
     let previousPageButton = document.getElementById('previousPage');
     let nextPageButton = document.getElementById('nextPage');
     previousPageButton.classList.remove('d-none');
     nextPageButton.classList.remove('d-none');
-    for (let i = 1; i <= 6; i++) {
-        let button = document.getElementById(`pageButton${i}`);
-        button.classList.remove('active-page');
+    let numberOfPages = Math.ceil(currentPokedexList.length / 25)
+    for (let i = 1; i <= numberOfPages; i++) {
+        document.getElementById(`pageButton${i}`).classList.remove('active-page');
     }
-    currentPage = Math.round(end / 25);
-    let selectedButton = document.getElementById(`pageButton${currentPage}`);
-    selectedButton.classList.add('active-page');
-    if (currentPage == 6) {
+    document.getElementById(`pageButton${currentPage}`).classList.add('active-page');
+    if (currentPage == numberOfPages) {
         nextPageButton.classList.add('d-none');
     } else if (currentPage == 1) {
         previousPageButton.classList.add('d-none');
@@ -118,6 +119,10 @@ function capitalizeFirstLetter(string) {
 
 function toggleVisibility(id, className) {
     document.getElementById(id).classList.toggle(className);
+}
+
+function hideMenu() {
+    document.getElementById('sidebar').classList.add('d-none');
 }
 
 
