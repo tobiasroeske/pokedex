@@ -17,10 +17,10 @@
     </body>
 </head>
 
-<body onload="init()">
+<body onload="init(2)">
     
     <header>
-        <img src="img/pokeball.png" alt="">
+        <img src="img/pokeball.png" alt="pokeball image" onclick="init(2)">
         <form onsubmit="return false;">
             <label for="pokemonSearch" name="pokemon-searche"></label>
             <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control">
@@ -29,17 +29,25 @@
         <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')">
     </header>
     <div class="sidebar d-none" id="sidebar">
-        <ul class="dropdown-list">
-            <li>Kanto</li>
-            <li>Johto</li>
-            <li>Johto</li>
-            <li>Johto</li>
-            <li>Johto</li>
-            <li>Johto</li>
-            <li>Johto</li>
+        <ul class="list-group list-group-flush dropdown-list bg-light">
+            <h2>Pokedex Regions</h2>
+            <li onclick="init(2); changeTag('kanto', 'list-group-item')" class="list-group-item" id="kanto">Kanto</li>
+            <li onclick="init(3); changeTag('johto', 'list-group-item')" class="list-group-item" id="johto">Johto</li>
+            <li onclick="init(4); changeTag('hoenn', 'list-group-item')" class="list-group-item" id="hoenn">Hoenn</li>
+            <li onclick="init(5); changeTag('sinnoh', 'list-group-item')" class="list-group-item" id="sinnoh">Sinnoh</li> 
+            <li onclick="init(8); changeTag('unova', 'list-group-item')" class="list-group-item" id="unova">Unova</li> 
+            <li onclick="init(11); changeTag('conquestGallery', 'list-group-item')" class="list-group-item" id="conquestGallery">Conquest Gallery</li> 
+            <li onclick="init(12); changeTag('kalosCentral', 'list-group-item')" class="list-group-item" id="kalosCentra">Kalos Central</li> 
+            <li onclick="init(13); changeTag('kalosCoastal', 'list-group-item')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li> 
+            <li onclick="init(14); changeTag('kalosMountain', 'list-group-item')" class="list-group-item" id="kalosMountain">Kalos Mountain</li> 
+            <li onclick="init(16); changeTag('alola', 'list-group-item')" class="list-group-item" id="alola">Alola</li> 
+            <li onclick="init(17); changeTag('melemele', 'list-group-item')" class="list-group-item" id="melemele">Melemele</li> 
+            <li onclick="init(18); changeTag('akala', 'list-group-item')" class="list-group-item" id="akala">Akala</li> 
+            <li onclick="init(19); changeTag('ulaula', 'list-group-item')" class="list-group-item" id="ulaula">Ulaula</li> 
+            <li onclick="init(20); changeTag('poni', 'list-group-item')" class="list-group-item" id="poni">Poni</li> 
         </ul>
     </div>
-    <main onclick="toggleMenu()">
+    <main>
         <h1>Pokedex</h1>
         <div class="content" id="content">
 
@@ -60,7 +68,7 @@
             <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()"><img src="img/arrow-right.svg" alt="" class="icon"></button>
         </div>
     </main>
-    <div class="popup d-none" id="popup" onclick="closeCard()">
+    <div class="popup d-none" id="popup" onclick="toggleVisibility('popup', 'd-none')">
         
     </div>
 </body>

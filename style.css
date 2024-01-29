@@ -57,25 +57,26 @@ main {
   right: 0; 
   top: 82px;
   z-index: 25;
-  
 }
 
 .dropdown-list {
   width: 400px;
-  height: 50vh;
+  height: fit-content;
   border-bottom-left-radius: 16px;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.1);
   background-color: rgb(242,242,242);
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 24px;
   padding: 32px 24px;
   font-weight: 700;
   font-size: 20px;
   position: fixed;
   top: 82px;
+  overflow: auto;
 }
+
+
 
 .dropdown-list li:hover {
   cursor: pointer;

@@ -10,6 +10,8 @@ function typeHTML(pokemon) {
 }
 
 function generateOverviewHTML(pokemon, i) {
+    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
+    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
     <div class="poke-container-small ${pokemon['types'][0]['type']['name']}" id="${pokemon['name']}Overview" onclick="openPokemonCard(${i})">
         <span class="pokeNumber">#${pokemon['id']}</span>
@@ -18,13 +20,15 @@ function generateOverviewHTML(pokemon, i) {
             <div class="types">
                 ${typeHTML(pokemon)}
             </div>
-            <img src="${pokemon['sprites']['other']['dream_world']['front_default']}" class="poke-image">
+            <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="poke-image">
         </div>
     </div>
 `;
 }
 
 function generatePokemonCardHTML(pokemon) {
+    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
+    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
@@ -48,21 +52,21 @@ function generatePokemonCardHTML(pokemon) {
                     </div>
                     <span>#${pokemon['id']}</span>
                 </div>
-                <img src="${pokemon['sprites']['other']['dream_world']['front_default']}" class="pokemon-card-img">
+                <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
             <div class="pokemon-card-bottom d-flex flex-column" onclick="doNotClose(event)">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeInfoTag('aboutTab')">About</a>
+                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeTag('aboutTab', 'nav-link')">About</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeInfoTag('statsTab')">
+                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeTag('statsTab', 'nav-link')">
                             <a id="statsTab" class="nav-link" href="#">Stats</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeInfoTag('evolutionTab')">
+                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeTag('evolutionTab', 'nav-link')">
                             <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeInfoTag('movesTab')">
+                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeTag('movesTab', 'nav-link')">
                             <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>

@@ -1,5 +1,6 @@
 
 let pokemonList = [];
+let currentPokedexList = [];
 let currentPokemon;
 let currentInfo;
 let currentEvolutionChain;
@@ -7,10 +8,10 @@ let limit = 25;
 let offset = 0;
 let currentPage = 1;
 
-async function init() {
+async function init(pokedexNumber) {
     generateLoadingScreen('content');
-    await loadPokemon();
-    renderPokemon();
+    await loadPokedex(pokedexNumber);
+    await renderPokemon();
 }
 
 function generateLoadingScreen(id) {
@@ -23,34 +24,42 @@ function generateLoadingScreen(id) {
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        
     `
 }
 
-async function loadPokemon() {
-    let url = `https://pokeapi.co/api/v2/pokemon/`
-    pokemonList = [];
-    for (let i = offset + 1; i <= limit; i++) {
-        let response = await fetch(`${url}${i}`);
-        if (response.ok) {
-            let currentPokemon = await response.json();
-            pokemonList.push(currentPokemon);
-        } else {
-            alert('It seems like something went wrong, could not find the pokemon')
+async function loadPokedex (number) {
+    let url = `https://pokeapi.co/api/v2/pokedex/${number}`;
+    let response = await fetch(url);
+    currentPokedexList = [];
+    if (response.ok) {
+        let currentPokedex = await response.json();
+        for (let i = 0; i < currentPokedex['pokemon_entries'].length; i++) {
+            const pokemon = currentPokedex['pokemon_entries'][i];
+            currentPokedexList.push(pokemon);
         }
+    } else {
+        alert('It seems like something went wrong, could not find the pokemon')
     }
 }
 
-function renderPokemon() {
+async function renderPokemon() {
     let content = document.getElementById('content');
     let htmlText = '';
-    for (let i = 0; i < pokemonList.length; i++) {
-        let pokemon = pokemonList[i];
-        htmlText += generateOverviewHTML(pokemon, i);
+    let url = `https://pokeapi.co/api/v2/pokemon/`
+    pokemonList = [];
+    for (let i = offset; i < limit; i++) {
+        let response = await fetch(`${url}${currentPokedexList[i]['pokemon_species']['name']}`);
+        if (response.ok) {
+            let pokemon = await response.json();
+            pokemonList.push(pokemon);
+            let index = i + 1;
+            htmlText += generateOverviewHTML(pokemon, index);
+        }
     }
     content.innerHTML = '';
     content.innerHTML = htmlText;
 }
+
 
 async function showNextPage() {
     if (limit < 125) {
@@ -168,9 +177,9 @@ async function getEvolutionData() {
     }
 }
 
-function changeInfoTag(id) {
+function changeTag(id, tab) {
     let specificTab = document.getElementById(id);
-    let tabs = document.getElementsByClassName('nav-link');
+    let tabs = document.getElementsByClassName(tab);
     for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
         tab.classList.remove('active');
