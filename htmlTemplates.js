@@ -1,3 +1,8 @@
+function showPokedexRegion(id) {
+    let headlineContent = document.getElementById(id).innerHTML;
+    document.getElementById('pokedexRegion').innerHTML = `Pokedex der ${headlineContent} Region`
+}
+
 function typeHTML(pokemon) {
     htmlText = '';
     for (let j = 0; j < pokemon['types'].length; j++) {

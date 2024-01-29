@@ -1,6 +1,7 @@
 
 let pokemonList = [];
 let currentPokedexList = [];
+let currentPokedex;
 let currentPokemon;
 let currentInfo;
 let currentEvolutionChain;
@@ -27,12 +28,12 @@ function generateLoadingScreen(id) {
     `
 }
 
-async function loadPokedex (number) {
+async function loadPokedex(number) {
     let url = `https://pokeapi.co/api/v2/pokedex/${number}`;
     let response = await fetch(url);
     currentPokedexList = [];
     if (response.ok) {
-        let currentPokedex = await response.json();
+        currentPokedex = await response.json();
         for (let i = 0; i < currentPokedex['pokemon_entries'].length; i++) {
             const pokemon = currentPokedex['pokemon_entries'][i];
             currentPokedexList.push(pokemon);
@@ -52,14 +53,11 @@ async function renderPokemon() {
         if (response.ok) {
             let pokemon = await response.json();
             pokemonList.push(pokemon);
-            let index = i + 1;
-            htmlText += generateOverviewHTML(pokemon, index);
+            htmlText += generateOverviewHTML(pokemon, i);
         }
     }
-    content.innerHTML = '';
     content.innerHTML = htmlText;
 }
-
 
 async function showNextPage() {
     if (limit < 125) {
@@ -118,12 +116,12 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function toggleVisibility (id, className) {
+function toggleVisibility(id, className) {
     document.getElementById(id).classList.toggle(className);
 }
 
 
-function changeHeartIcon () {
+function changeHeartIcon() {
     toggleVisibility('heart', 'd-none');
     toggleVisibility('heartFilled', 'd-none');
 }
@@ -147,12 +145,12 @@ async function renderPokemonCard(pokemon) {
     popup.innerHTML = '';
     popup.innerHTML = htmlText;
     await getEvolutionData();
-    
+
 }
 
 async function getPokemonDetails() {
     let url = currentPokemon['species']['url'];
-    
+
     let response = await fetch(url);
     if (response.ok) {
         let pokemonInfo = await response.json();
@@ -209,12 +207,12 @@ function showInfo(htmlFunc) {
     pokeInfo.innerHTML = htmlFunc;
 }
 
-function sortMoves(){
+function sortMoves() {
     let moves = currentPokemon['moves'];
     moves.sort((a, b) => {
         let levelA = a['version_group_details'][0]['level_learned_at'];
         let levelB = b['version_group_details'][0]['level_learned_at'];
         return levelA - levelB; // Falls negativer Wert rauskommt, wird b vor a sortiert, falls
     });                           // positiver Wert, wird b nach a sortiert
-    return moves;    
+    return moves;
 }
