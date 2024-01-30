@@ -44,6 +44,23 @@ function generatePageButtons() {
     `;
 }
 
+function generatePageButtons() {
+    let pagesContainer = document.getElementById('pages');
+    pagesContainer.innerHTML = /*html*/`
+        <div class="pages-container mb-5" id="pages">
+            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()">
+                <img src="img/arrow-left.svg" alt="" class="icon">
+            </button>
+            <div class="page-btns">
+                ${renderPageButtonsHTML()}
+            </div>
+            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()">
+                <img src="img/arrow-right.svg" alt="" class="icon">
+            </button>
+        </div>
+    `;
+}
+
 function renderPageButtonsHTML() {
     let numberOfPages = Math.ceil(currentPokedexList.length / 25);
     let htmlText = '';
@@ -59,7 +76,7 @@ function generatePokemonCardHTML(pokemon) {
     let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
     let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
-        <div class="popup-card" id="${pokemon['name']}Card" onclick="doNotClose(event)">
+        <div class="popup-card" id="${pokemon['name']}Card" onclick="stopDefaultAction(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
                 <div class="d-flex justify-content-between px-5 pt-5 w-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-arrow-left" viewBox="0 0 16 16" onclick="toggleVisibility('popup', 'd-none')">
@@ -84,18 +101,18 @@ function generatePokemonCardHTML(pokemon) {
                 <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
-            <div class="pokemon-card-bottom d-flex flex-column" onclick="doNotClose(event)">
+            <div class="pokemon-card-bottom d-flex flex-column" onclick="stopDefaultAction(event)">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeTag('aboutTab', 'nav-link')">About</a>
+                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeActiveTag('aboutTab', 'nav-link')">About</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeTag('statsTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeActiveTag('statsTab', 'nav-link')">
                             <a id="statsTab" class="nav-link" href="#">Stats</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeTag('evolutionTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeActiveTag('evolutionTab', 'nav-link')">
                             <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeTag('movesTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeActiveTag('movesTab', 'nav-link')">
                             <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>
@@ -142,7 +159,7 @@ function generateAboutHTML() {
     return /*html*/`
         <div class="d-flex flex-column py-2 px-5 gap-3">
             <h4>Pokedex Entry</h4>
-            <i>"${currentInfo['flavor_text_entries'][1]['flavor_text']}"</i>
+            <i>"${renderTextEntries()}"</i>
             <div class="d-flex flex-column fs-6 w-75">
                 <div class="d-flex justify-content-between align-items-center gap-3">
                     <b>Base happiness: </b>${currentInfo['base_happiness']}
@@ -228,5 +245,11 @@ function renderMovesHTML() {
             `;
         }
     }
+    return htmlText;
+}
+
+function renderTextEntries() {
+    let textEntries = sortTextEntries();
+    let htmlText = textEntries[0]['flavor_text'];
     return htmlText;
 }

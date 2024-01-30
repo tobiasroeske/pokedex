@@ -63,10 +63,10 @@ async function renderPokemon() {
 
 function renderNewPokedex(id) {
     let headlineContent = document.getElementById(id).innerHTML;
-    document.getElementById('pokedexRegion').innerHTML = `Pokedex der ${headlineContent} Region`
+    document.getElementById('pokedexRegion').innerHTML = `Pokedex of ${headlineContent} region`
     resetOffsetAndLimit();
     toggleVisibility('sidebar', 'd-none');
-    changeTag(id, 'list-group-item');
+    changeActiveTag(id, 'list-group-item');
 }
 
 function resetOffsetAndLimit () {
@@ -131,9 +131,11 @@ function changeHeartIcon() {
     toggleVisibility('heartFilled', 'd-none');
 }
 
-function doNotClose(event) {
+function stopDefaultAction(event) {
     event.stopPropagation();
+    event.preventDefault();
 }
+
 
 async function openPokemonCard(index) {
     generateLoadingScreen('popup');
@@ -180,7 +182,7 @@ async function getEvolutionData() {
     }
 }
 
-function changeTag(id, tab) {
+function changeActiveTag(id, tab) {
     let specificTab = document.getElementById(id);
     let tabs = document.getElementsByClassName(tab);
     for (let i = 0; i < tabs.length; i++) {
@@ -220,4 +222,17 @@ function sortMoves() {
         return levelA - levelB; // Falls negativer Wert rauskommt, wird b vor a sortiert, falls
     });                           // positiver Wert, wird b nach a sortiert
     return moves;
+}
+
+function sortTextEntries() {
+    let entries = currentInfo['flavor_text_entries'];
+    entries.sort((a, b) => {
+        if (a['language']['name'] == 'en') {
+            return -1;
+        } else if (b['language']['name'] == 'en') {
+            return 1;
+        } 
+        return 0;
+    });
+    return entries;
 }
