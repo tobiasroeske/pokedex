@@ -69,7 +69,7 @@ function renderNewPokedex(id) {
     changeActiveTag(id, 'list-group-item');
 }
 
-function resetOffsetAndLimit () {
+function resetOffsetAndLimit() {
     offset = 0;
     limit = 25;
 }
@@ -182,6 +182,18 @@ async function getEvolutionData() {
     }
 }
 
+function getPokemonImage(name) {
+    for (let i = 0; i < pokemonList.length; i++) {
+        const pokemon = pokemonList[i];
+        let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
+        let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
+        if (pokemon['name'] == name) {
+            return primaryImagePath == null ? secondaryImagePath : primaryImagePath;
+        }
+
+    }
+}
+
 function changeActiveTag(id, tab) {
     let specificTab = document.getElementById(id);
     let tabs = document.getElementsByClassName(tab);
@@ -231,7 +243,7 @@ function sortTextEntries() {
             return -1;
         } else if (b['language']['name'] == 'en') {
             return 1;
-        } 
+        }
         return 0;
     });
     return entries;

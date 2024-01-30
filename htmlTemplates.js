@@ -11,8 +11,6 @@ function typeHTML(pokemon) {
 }
 
 function generateOverviewHTML(pokemon, i) {
-    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
-    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
     <div class="poke-container-small ${pokemon['types'][0]['type']['name']}" id="${pokemon['name']}Overview" onclick="openPokemonCard(${i})">
         <span class="pokeNumber">#${pokemon['id']}</span>
@@ -21,7 +19,7 @@ function generateOverviewHTML(pokemon, i) {
             <div class="types">
                 ${typeHTML(pokemon)}
             </div>
-            <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="poke-image">
+            <img src="${getPokemonImage(pokemon['name'])}" class="poke-image">
         </div>
     </div>
 `;
@@ -73,8 +71,6 @@ function renderPageButtonsHTML() {
 }
 
 function generatePokemonCardHTML(pokemon) {
-    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
-    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="stopDefaultAction(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
@@ -98,7 +94,7 @@ function generatePokemonCardHTML(pokemon) {
                     </div>
                     <span>#${pokemon['id']}</span>
                 </div>
-                <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="pokemon-card-img">
+                <img src="${getPokemonImage(pokemon['name'])}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
             <div class="pokemon-card-bottom d-flex flex-column" onclick="stopDefaultAction(event)">
