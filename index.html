@@ -17,14 +17,14 @@
     </body>
 </head>
 
-<body onload="init(2)">
+<body onload="init(2); getAllPokemon()">
     
     <header>
         <img src="img/pokeball.png" alt="pokeball image" onclick="init(2)">
         <form onsubmit="return false;">
             <label for="pokemonSearch" name="pokemon-searche"></label>
             <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control">
-            <button class="btn btn-light">Search</button>
+            <button class="btn btn-light" onclick="filterPokemon()">Search</button>
         </form>
         <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')">
     </header>
@@ -47,13 +47,13 @@
             <li onclick="init(20); renderNewPokedex('poni')" class="list-group-item" id="poni">Poni</li> 
         </ul>
     </div>
-    <main id="mainContainer" onclick="hideMenu()">
-        <h1 id="pokedexRegion">Pokedex of Kanto region</h1>
+    <main id="mainContainer" onclick="hideFromView('sidebar')">
+        <h1 id="pokedexRegion">Pokedex of Kanto-region</h1>
         <div class="content" id="content">
 
         </div>
 
-        <div class="pages-container mb-5" id="pages">
+        <div class="pages-container" id="pages">
             
         </div>
     </main>

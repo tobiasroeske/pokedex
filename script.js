@@ -1,6 +1,7 @@
 
 let pokemonList = [];
 let currentPokedexList = [];
+let listOfAllPokemon = [];
 let currentPokedex;
 let currentPokemon;
 let currentInfo;
@@ -14,6 +15,20 @@ async function init(pokedexNumber) {
     await loadPokedex(pokedexNumber);
     await renderPokemon();
     generatePageButtons();
+}
+
+async function getAllPokemon() {
+    let url = 'https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0';
+    let response = await fetch(url);
+    if (response.ok) {
+        let completeList = await response.json();
+        for (let i = 0; i < completeList['results'].length; i++) {
+            const result = completeList['results'][i];
+            listOfAllPokemon.push(result);
+        }
+    } else {
+        alert('It seems like something went wrong, could not find the pokemon')
+    }
 }
 
 function generateLoadingScreen(id) {
@@ -63,7 +78,7 @@ async function renderPokemon() {
 
 function renderNewPokedex(id) {
     let headlineContent = document.getElementById(id).innerHTML;
-    document.getElementById('pokedexRegion').innerHTML = `Pokedex of ${headlineContent} region`
+    document.getElementById('pokedexRegion').innerHTML = `Pokedex of ${headlineContent}-region`
     resetOffsetAndLimit();
     toggleVisibility('sidebar', 'd-none');
     changeActiveTag(id, 'list-group-item');
@@ -74,12 +89,12 @@ function resetOffsetAndLimit() {
     limit = 25;
 }
 
-async function showNextPage() {
+function showNextPage() {
     currentPage++;
     changePage(currentPage);
 }
 
-async function showPreviousPage() {
+function showPreviousPage() {
     currentPage--
     changePage(currentPage);
 }
@@ -121,8 +136,8 @@ function toggleVisibility(id, className) {
     document.getElementById(id).classList.toggle(className);
 }
 
-function hideMenu() {
-    document.getElementById('sidebar').classList.add('d-none');
+function hideFromView(id) {
+    document.getElementById(id).classList.add('d-none');
 }
 
 
@@ -157,7 +172,6 @@ async function renderPokemonCard(pokemon) {
 
 async function getPokemonDetails() {
     let url = currentPokemon['species']['url'];
-
     let response = await fetch(url);
     if (response.ok) {
         let pokemonInfo = await response.json();
@@ -182,15 +196,17 @@ async function getEvolutionData() {
     }
 }
 
-function getPokemonImage(name) {
-    for (let i = 0; i < pokemonList.length; i++) {
-        const pokemon = pokemonList[i];
+async function getPokemonImage(name) {
+    let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+    let response = await fetch(url);
+    if (response.ok) {
+        let pokemon= await response.json();
         let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
         let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
-        if (pokemon['name'] == name) {
-            return primaryImagePath == null ? secondaryImagePath : primaryImagePath;
-        }
-
+        return primaryImagePath == null ? secondaryImagePath : primaryImagePath;
+    } else {
+        alert('It seems like something went wrong, could not find the pokemon')
+        return null;
     }
 }
 
@@ -220,10 +236,10 @@ function startProgressBarAnimation() {
     }, 100);
 }
 
-function showInfo(htmlFunc) {
+async function showInfo(htmlFunc) {
     let pokeInfo = document.getElementById('pokemonInfo');
     pokeInfo.innerHTML = '';
-    pokeInfo.innerHTML = htmlFunc;
+    pokeInfo.innerHTML = await htmlFunc;
 }
 
 function sortMoves() {
@@ -247,4 +263,28 @@ function sortTextEntries() {
         return 0;
     });
     return entries;
+}
+
+async function filterPokemon() {
+    generateLoadingScreen('content');
+    htmlText = '';
+    pokemonList = [];
+    index = 0
+    let search = document.getElementById('pokemonSearch').value;
+    search = search.toLowerCase();
+    for (let i = 0; i < listOfAllPokemon.length; i++) {
+        const pokemon = listOfAllPokemon[i];
+        if (pokemon['name'].includes(search)) {
+            let response = await fetch(pokemon['url']);
+            if (response.ok) {
+                let pokemon = await response.json();
+                pokemonList.push(pokemon);
+                htmlText += generateOverviewHTML(pokemon, index);
+                index++;
+            }
+        }
+    }
+    document.getElementById('content').innerHTML = htmlText;
+    hideFromView('pages');
+    document.getElementById('pokemonSearch').value = '';
 }

@@ -11,6 +11,8 @@ function typeHTML(pokemon) {
 }
 
 function generateOverviewHTML(pokemon, i) {
+    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
+    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
     <div class="poke-container-small ${pokemon['types'][0]['type']['name']}" id="${pokemon['name']}Overview" onclick="openPokemonCard(${i})">
         <span class="pokeNumber">#${pokemon['id']}</span>
@@ -19,7 +21,7 @@ function generateOverviewHTML(pokemon, i) {
             <div class="types">
                 ${typeHTML(pokemon)}
             </div>
-            <img src="${getPokemonImage(pokemon['name'])}" class="poke-image">
+            <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="poke-image">
         </div>
     </div>
 `;
@@ -27,8 +29,9 @@ function generateOverviewHTML(pokemon, i) {
 
 function generatePageButtons() {
     let pagesContainer = document.getElementById('pages');
+    pagesContainer.classList.remove('d-none');
     pagesContainer.innerHTML = /*html*/`
-        <div class="pages-container mb-5" id="pages">
+        <div class="pages-container" id="pages mb-5">
             <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()">
                 <img src="img/arrow-left.svg" alt="" class="icon">
             </button>
@@ -42,22 +45,7 @@ function generatePageButtons() {
     `;
 }
 
-function generatePageButtons() {
-    let pagesContainer = document.getElementById('pages');
-    pagesContainer.innerHTML = /*html*/`
-        <div class="pages-container mb-5" id="pages">
-            <button id="previousPage" class="btn btn-light d-none" onclick="showPreviousPage()">
-                <img src="img/arrow-left.svg" alt="" class="icon">
-            </button>
-            <div class="page-btns">
-                ${renderPageButtonsHTML()}
-            </div>
-            <button id="nextPage" class="btn btn-light focus-ring focus-ring-secondary" onclick="showNextPage()">
-                <img src="img/arrow-right.svg" alt="" class="icon">
-            </button>
-        </div>
-    `;
-}
+
 
 function renderPageButtonsHTML() {
     let numberOfPages = Math.ceil(currentPokedexList.length / 25);
@@ -66,11 +54,13 @@ function renderPageButtonsHTML() {
         htmlText += /*html*/`
             <button id="pageButton${i}" class="btn btn-light" onclick="changePage(${i})">${i}</button>
         `;
-    } 
+    }
     return htmlText;
 }
 
 function generatePokemonCardHTML(pokemon) {
+    let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
+    let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
     return /*html*/`
         <div class="popup-card" id="${pokemon['name']}Card" onclick="stopDefaultAction(event)">
             <div class="${pokemon['types'][0]['type']['name']} popup-card-top">
@@ -94,7 +84,7 @@ function generatePokemonCardHTML(pokemon) {
                     </div>
                     <span>#${pokemon['id']}</span>
                 </div>
-                <img src="${getPokemonImage(pokemon['name'])}" class="pokemon-card-img">
+                <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="pokemon-card-img">
                 <img src="img/pokeball_white_100.png" alt="" class="pokeball-img">
             </div>
             <div class="pokemon-card-bottom d-flex flex-column" onclick="stopDefaultAction(event)">
@@ -139,7 +129,7 @@ function renderStatsHTML() {
                 <td><b>${stat['stat']['name']}</b></td>
                 <td>${stat['base_stat']}</td>
                 <td>
-                <div class="progress w-100 bg-secondary">
+                <div class="progress w-100 bg-grey">
                 <div class="progress-bar progress-bar-animated ${currentPokemon['types'][0]['type']['name']}" role="progressbar" style="width: 0%;">
                         </div>
                 </div>
@@ -177,41 +167,45 @@ function generateAboutHTML() {
     `
 }
 
-function generateEvolutionHTML() {
-    let chain = currentEvolutionChain['chain'];
-    let firstKey = chain['species']['name'];
-    let evolvesTo = chain['evolves_to'];
+async function generateEvolutionHTML() {
+    let nameFirstPokemon = currentEvolutionChain['chain']['species']['name'];
+    let nameSecondPokemon = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
     let htmlText = /*html*/`
-        <div class="d-flex flex-column py-2 px-5">
+        <div class="d-flex flex-column py-2 px-5 gap-3">
             <h4>Evolution Chain</h4>
-            <ul>
-                <li>${capitalizeFirstLetter(firstKey)}</li>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column gap-2">
+                    <img src="${await getPokemonImage(nameFirstPokemon)}" class="evolution-img">
+                    <h6>${capitalizeFirstLetter(nameFirstPokemon)}</h6>
+                </div>
+                <img src="img/arrow-right.svg" alt="" class="icon">
+                <div class="d-flex flex-column gap-2">
+                    <img src="${await getPokemonImage(nameSecondPokemon)}" class="evolution-img">
+                    <h6>${capitalizeFirstLetter(nameSecondPokemon)}</h6>
+                </div>
+            </div>
     `;
-    if (evolvesTo.length > 0) {
-        let secondKey = evolvesTo[0]['species']['name'];
-        let firstLevelChange = evolvesTo[0]['evolution_details'][0]['min_level'];
+    if (currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'].length > 0) {
+        let nameThirdPokemon = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
         htmlText += /*html*/`
-            <li>${capitalizeFirstLetter(secondKey)} at Level ${firstLevelChange}</li>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column gap-2">
+                        <img src="${await getPokemonImage(nameSecondPokemon)}" class="evolution-img">
+                        <h6>${capitalizeFirstLetter(nameSecondPokemon)}</h6>
+                    </div>
+                    <img src="img/arrow-right.svg" alt="" class="icon">
+                    <div class="d-flex flex-column gap-2">
+                        <img src="${await getPokemonImage(nameThirdPokemon)}" class="evolution-img">
+                        <h6>${capitalizeFirstLetter(nameThirdPokemon)}</h6>
+                    </div>
+                </div>
+            </div>
         `;
-        if (evolvesTo[0]['evolves_to'].length > 0) {
-            let thirdKey = evolvesTo[0]['evolves_to'][0]['species']['name'];
-            let secondLevelChange = evolvesTo[0]['evolves_to'][0]['evolution_details'][0]['min_level'];
-            htmlText += /*html*/`
-                <li>${capitalizeFirstLetter(thirdKey)} at Level ${secondLevelChange}</li>
-            `;
-        }
+    } else {
+        htmlText += /*html*/`
+            </div>
+        `
     }
-    htmlText += /*html*/`
-            </ul>
-            <h5>Evolution Infos</h5>
-            <ul>
-                <li>Growth rate: ${currentInfo['growth_rate']['name']}</li>
-                <li>Gender difference: ${currentInfo['has_gender_difference'] ? 'Yes' : 'No'}</li>
-                <li>Legendary: ${currentInfo['is_legendary']? 'Yes' : 'No'}</li>
-                <li>Mythical: ${currentInfo['is_mythical']? 'Yes':'No'}</li>
-            </ul>
-        </div>
-    `;
     return htmlText;
 }
 
@@ -219,9 +213,17 @@ function generateMovesHtml() {
     let htmlText = '';
     htmlText = /*html*/`
         <div class="d-flex flex-column py-2 px-5">
-            <ul>
-                ${renderMovesHTML()}
-            </ul>
+            <table class="custom-table ${currentPokemon['types'][0]['type']['name']}">
+                <thead>
+                    <tr>
+                        <th scope="col">Move</th>
+                        <th scope="col">Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${renderMovesHTML()}           
+                </tbody>
+            </table>
         </div>
     `;
     return htmlText;
@@ -237,7 +239,10 @@ function renderMovesHTML() {
 
         if (move['version_group_details'][0]['move_learn_method']['name'] === 'level-up') {
             htmlText += /*html*/`
-                <li><b>${capitalizeFirstLetter(moveName)}</b> learned at <b>Lvl ${levelLearnedAt}</b></li>
+                <tr>
+                    <td>${capitalizeFirstLetter(moveName)}</td>
+                    <td>${levelLearnedAt}</td>
+                </tr>
             `;
         }
     }
