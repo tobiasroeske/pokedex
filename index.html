@@ -21,7 +21,7 @@
 <body onload="init(2)">
 
     <header>
-        <img src="img/pokeball.png" alt="pokeball image" onclick="init(2)">
+        <img src="img/pokeball.png" alt="pokeball image" onclick="init(2)" class="header-icon">
         <form onsubmit="return false;" class="d-flex flex-row gy-2 gx -3 align-items-center form">
             <div class="col">
                 <label for="pokemonSearch" name="pokemon-searche"></label>
@@ -36,11 +36,8 @@
             <div>
                 <button class="btn btn-light" onclick="renderSearchedPokemon()">Search</button>
             </div>
-                
-            
-
         </form>
-        <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')">
+        <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')" class="header-icon">
     </header>
 
 

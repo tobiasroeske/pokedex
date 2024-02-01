@@ -95,7 +95,7 @@ function renderMovesHTML() {
 }
 
 function renderTextEntries() {
-    let textEntries = sortTextEntries();
+    let textEntries = sortArrayByLanguage(currentInfo['flavor_text_entries']);
     let htmlText = textEntries[0]['flavor_text'];
     return htmlText;
 }

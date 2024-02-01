@@ -13,7 +13,8 @@ function generateLoadingScreenHTML(id) {
 }
 
 function generateHeadlineHTML() {
-    let headlineContent = currentPokedex['names'][2]['name'];
+    let pokedexNames = sortArrayByLanguage(currentPokedex['names']);
+    let headlineContent = pokedexNames[0]['name'];
     document.getElementById('pokedexRegion').innerHTML = `Pokedex of ${headlineContent}-region`;
 }
 

@@ -5,6 +5,9 @@
 body {
   margin: 0;
   background-color: rgba(0, 0, 0, 0.05);
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 h1 {
@@ -47,7 +50,8 @@ main {
 .form {
   display: flex;
   gap: 8px;
-  width: 40%;
+  width: 70%;
+  max-width: 600px;
 }
 
 .col {
@@ -238,8 +242,7 @@ main {
 }
 
 .popup-card {
-  width: 30%;
-  min-width: 400px;
+  width: 400px;
   height: 80vh;
   z-index: 9;
   margin-top: 0;
@@ -310,7 +313,7 @@ main {
   margin-top: -16px;
   z-index: 3;
   height: auto;
-  min-height: 385px;
+  height: 385px;
   font-size: 16px;
   overflow: auto;
 }
@@ -407,7 +410,7 @@ td:nth-child(2) {
   top: 36px;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  max-height: 200px;
+  max-height: 288px;
   overflow-y: auto;
 }
 .resultContainer ul {
@@ -429,3 +432,216 @@ td:nth-child(2) {
 .d-none {
   display: none;
 }
+
+@media (max-width: 784px) {
+  header {
+    height: 64px;
+  }
+
+  .header-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .poke-container-small {
+    width: 300px;
+    height: 240px;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 690px) {
+  .poke-container-small {
+    width: 250px;
+    height: 200px;
+    gap: 0;
+  }
+
+  .page-btns {
+    gap: 16px;
+  }
+
+  .pages-container {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 615px) {
+  .page-btns {
+    display: none;
+  }
+
+  .pages-container {
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 560px) {
+   header {
+    padding: 24px;
+   }
+
+   .control-flow {
+    font-size: 14px;
+   }
+
+   .resultContainer {
+    font-size: 14px;
+   }
+
+   .btn {
+    font-size: 14px;
+   }
+
+  .content {
+    gap: 8px;
+  }
+
+  .poke-container-small {
+    width: 250px;
+    height: 200px;
+    gap: 0;
+    padding: 24px 24px;
+  }
+
+  .poke-details {
+    gap: 8px;
+  }
+
+  .poke-image {
+    width: 96px;
+    height: 96px;
+  }
+
+  .pokeNumber {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 526px) {
+  .poke-container-small {
+    width: 200px;
+    height: 160px;
+  }
+
+  .types span {
+    font-size: 14px;
+  }
+
+  .poke-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 430px) {
+  header {
+    padding: 16px;
+  }
+
+  main {
+    gap: 40px;
+    padding-bottom: 48px;
+  }
+
+  .header-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .poke-container-small {
+    width: 160px;
+    height: 128px;
+    padding: 16px 16px;
+  }
+
+  .poke-image {
+    width: 64px;
+    height: 64px;
+  }
+
+  .pokeNumber {
+    font-size: 12px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .types {
+    gap: 8px;
+  }
+
+  .types span {
+    padding: 4px 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+
+}
+
+@media (max-width: 340px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  main {
+    padding-top: 64px;
+    padding-bottom: 32px;
+    gap: 24px;
+  }
+
+  .btn {
+    padding: 6px 8px;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  header {
+    padding: 8px;
+  }
+
+  .poke-container-small {
+    width: 136px;
+    height: 108.8px;
+    padding: 12px 8px;
+  }
+
+  .poke-image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .pokeNumber {
+    top: 4px;
+    right: 6px;
+  }
+
+  .types span {
+    font-size: 12px;
+  }
+
+  .poke-details {
+    gap: 0;
+  }
+}
+  
+

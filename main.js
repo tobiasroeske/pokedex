@@ -207,9 +207,9 @@ function sortMoves() {
     return moves;
 }
 
-function sortTextEntries() {
-    let entries = currentInfo['flavor_text_entries'];
-    entries.sort((a, b) => {
+function sortArrayByLanguage(array) {
+    // let entries = currentInfo['flavor_text_entries'];
+    array.sort((a, b) => {
         if (a['language']['name'] == 'en') {
             return -1;
         } else if (b['language']['name'] == 'en') {
@@ -217,7 +217,12 @@ function sortTextEntries() {
         }
         return 0;
     });
-    return entries;
+    return array;
+}
+
+function sortPokedexLanguages() {
+    let languages = currentPokedex['names'];
+
 }
 
 
@@ -251,8 +256,9 @@ function searchPokemon(value) {
     listOfAllPokemon.forEach(pokemon => {
         if (pokemon['name'].match(regex)) { // Untersucht, ob regex einen Namen matched
             const listItem = document.createElement('li');
-            listItem.innerHTML = pokemon.name.replace(regex, match => `<b>${capitalizeFirstLetter(match)}</b>`);
-            listItem.onclick = () => selectPokemon(pokemon.name);
+            let resultName = capitalizeFirstLetter(pokemon['name']);
+            listItem.innerHTML = resultName.replace(regex, match => `<b>${match}</b>`);
+            listItem.onclick = () => selectPokemon(pokemon['name']);
             searchResults.appendChild(listItem);
         }
     });
