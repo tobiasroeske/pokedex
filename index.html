@@ -19,33 +19,50 @@
 </head>
 
 <body onload="init(2)">
-    
+
     <header>
         <img src="img/pokeball.png" alt="pokeball image" onclick="init(2)">
-        <form onsubmit="return false;">
-            <label for="pokemonSearch" name="pokemon-searche"></label>
-            <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control">
-            <button class="btn btn-light" onclick="renderSearchedPokemon()">Search</button>
+        <form onsubmit="return false;" class="d-flex flex-row gy-2 gx -3 align-items-center form">
+            <div class="col">
+                <label for="pokemonSearch" name="pokemon-searche"></label>
+                <div class="d-flex flex-column form-item">
+                    <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control"
+                        onclick="getAllPokemon();" oninput="searchPokemon(this.value)">
+                    <div id="resultContainer" class="resultContainer form-item d-none">
+                        <ul id="searchResults"></ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-light" onclick="renderSearchedPokemon()">Search</button>
+            </div>
+                
+            
+
         </form>
         <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')">
     </header>
+
+
     <div class="sidebar d-none" id="sidebar">
         <ul class="dropdown-list bg-light">
             <h3>Pokedex Regions</h3>
             <li onclick="init(2); hideFromView('sidebar')" class="list-group-item" id="kanto">Kanto</li>
             <li onclick="init(3); hideFromView('sidebar')" class="list-group-item" id="johto">Johto</li>
             <li onclick="init(4); hideFromView('sidebar')" class="list-group-item" id="hoenn">Hoenn</li>
-            <li onclick="init(5); hideFromView('sidebar')" class="list-group-item" id="sinnoh">Sinnoh</li> 
-            <li onclick="init(8); hideFromView('sidebar')" class="list-group-item" id="unova">Unova</li> 
-            <li onclick="init(11); hideFromView('sidebar')" class="list-group-item" id="conquestGallery">Conquest Gallery</li> 
-            <li onclick="init(12); hideFromView('sidebar')" class="list-group-item" id="kalosCentral">Kalos Central</li> 
-            <li onclick="init(13); hideFromView('sidebar')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li> 
-            <li onclick="init(14); hideFromView('sidebar')" class="list-group-item" id="kalosMountain">Kalos Mountain</li> 
-            <li onclick="init(16); hideFromView('sidebar')" class="list-group-item" id="alola">Alola</li> 
-            <li onclick="init(17); hideFromView('sidebar')" class="list-group-item" id="melemele">Melemele</li> 
-            <li onclick="init(18); hideFromView('sidebar')" class="list-group-item" id="akala">Akala</li> 
-            <li onclick="init(19); hideFromView('sidebar')" class="list-group-item" id="ulaula">Ulaula</li> 
-            <li onclick="init(20); hideFromView('sidebar')" class="list-group-item" id="poni">Poni</li> 
+            <li onclick="init(5); hideFromView('sidebar')" class="list-group-item" id="sinnoh">Sinnoh</li>
+            <li onclick="init(8); hideFromView('sidebar')" class="list-group-item" id="unova">Unova</li>
+            <li onclick="init(11); hideFromView('sidebar')" class="list-group-item" id="conquestGallery">Conquest
+                Gallery</li>
+            <li onclick="init(12); hideFromView('sidebar')" class="list-group-item" id="kalosCentral">Kalos Central</li>
+            <li onclick="init(13); hideFromView('sidebar')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li>
+            <li onclick="init(14); hideFromView('sidebar')" class="list-group-item" id="kalosMountain">Kalos Mountain
+            </li>
+            <li onclick="init(16); hideFromView('sidebar')" class="list-group-item" id="alola">Alola</li>
+            <li onclick="init(17); hideFromView('sidebar')" class="list-group-item" id="melemele">Melemele</li>
+            <li onclick="init(18); hideFromView('sidebar')" class="list-group-item" id="akala">Akala</li>
+            <li onclick="init(19); hideFromView('sidebar')" class="list-group-item" id="ulaula">Ulaula</li>
+            <li onclick="init(20); hideFromView('sidebar')" class="list-group-item" id="poni">Poni</li>
         </ul>
     </div>
     <main id="mainContainer" onclick="hideFromView('sidebar')">
@@ -55,13 +72,13 @@
         </div>
 
         <div class="pages-container" id="pages">
-            
+
         </div>
     </main>
     <div class="popup d-none" id="popup" onclick="toggleVisibility('popup', 'd-none')">
-        
+
     </div>
-  <!--  <footer><a href="https://www.vecteezy.com/free-vector/pokemon-logo">Pokemon Logo Vectors by Vecteezy</a></footer> -->
+    <!--  <footer><a href="https://www.vecteezy.com/free-vector/pokemon-logo">Pokemon Logo Vectors by Vecteezy</a></footer> -->
 </body>
 
 </html>

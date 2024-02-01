@@ -28,7 +28,6 @@ async function renderPokemonCard(pokemon) {
 
 async function renderSearchedPokemon() {
     generateLoadingScreenHTML('content');
-    await getAllPokemon();
     let htmlText= '';
     let index = 0;
     await getSearchedPokemon();

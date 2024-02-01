@@ -20,6 +20,7 @@ async function init(pokedexNumber) {
 }
 
 async function getAllPokemon() {
+    listOfAllPokemon = [];
     let url = 'https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0';
     let response = await fetch(url);
     if (response.ok) {
@@ -241,3 +242,35 @@ function displaySearchValue () {
     let searchValue = document.getElementById('pokemonSearch').value;
     headline.innerHTML = /*html*/`Search results of  "${searchValue}"`;
 }
+
+
+function searchPokemon(value) {
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+    let regex = new RegExp(value, 'i'); // Erstellt einen case-insensitiven Ausdruck mit dem Inhalv von value
+    listOfAllPokemon.forEach(pokemon => {
+        if (pokemon['name'].match(regex)) { // Untersucht, ob regex einen Namen matched
+            const listItem = document.createElement('li');
+            listItem.innerHTML = pokemon.name.replace(regex, match => `<b>${capitalizeFirstLetter(match)}</b>`);
+            listItem.onclick = () => selectPokemon(pokemon.name);
+            searchResults.appendChild(listItem);
+        }
+    });
+    displaySearchResults(value);
+}
+
+function displaySearchResults(value) {
+    let resultContainer = document.getElementById('resultContainer');
+    let searchResults = document.getElementById('searchResults');
+    if (searchResults.innerHTML != '') {
+        resultContainer.classList.remove('d-none');
+    } 
+    if (value.trim() === '') { //löscht alle Leerzeichen in Value
+        resultContainer.classList.add('d-none');
+    }
+}
+
+function selectPokemon(name) {
+    document.getElementById('pokemonSearch').value = name;
+    document.getElementById('resultContainer').classList.add('d-none');
+    }
