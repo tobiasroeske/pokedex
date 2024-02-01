@@ -1,4 +1,22 @@
 
+function generateLoadingScreenHTML(id) {
+    let element = document.getElementById(id);
+    element.innerHTML = '';
+    element.innerHTML = /*html*/`
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="text-light">Loading ... </h2>
+            <div class="spinner-border spinner-border-md text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `
+}
+
+function generateHeadlineHTML() {
+    let headlineContent = currentPokedex['names'][2]['name'];
+    document.getElementById('pokedexRegion').innerHTML = `Pokedex of ${headlineContent}-region`;
+}
+
 function typeHTML(pokemon) {
     htmlText = '';
     for (let j = 0; j < pokemon['types'].length; j++) {
@@ -45,19 +63,6 @@ function generatePageButtons() {
     `;
 }
 
-
-
-function renderPageButtonsHTML() {
-    let numberOfPages = Math.ceil(currentPokedexList.length / 25);
-    let htmlText = '';
-    for (let i = 1; i <= numberOfPages; i++) {
-        htmlText += /*html*/`
-            <button id="pageButton${i}" class="btn btn-light" onclick="changePage(${i})">${i}</button>
-        `;
-    }
-    return htmlText;
-}
-
 function generatePokemonCardHTML(pokemon) {
     let primaryImagePath = pokemon['sprites']['other']['dream_world']['front_default'];
     let secondaryImagePath = pokemon['sprites']['other']['home']['front_default'];
@@ -90,15 +95,15 @@ function generatePokemonCardHTML(pokemon) {
             <div class="pokemon-card-bottom d-flex flex-column" onclick="stopDefaultAction(event)">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfo(generateAboutHTML()); changeActiveTag('aboutTab', 'nav-link')">About</a>
+                            <a id="aboutTab" class="nav-link active" aria-current="page" href="#" onclick="showInfoTab(generateAboutHTML()); changeToActiveTab('aboutTab', 'nav-link')">About</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateBaseStatsHTML()); changeActiveTag('statsTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfoTab(generateBaseStatsHTML()); changeToActiveTab('statsTab', 'nav-link')">
                             <a id="statsTab" class="nav-link" href="#">Stats</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateEvolutionHTML());changeActiveTag('evolutionTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfoTab(generateEvolutionHTML());changeToActiveTab('evolutionTab', 'nav-link')">
                             <a id="evolutionTab" class="nav-link" href="#">Evolution</a>
                         </li>
-                        <li class="nav-item" onclick="showInfo(generateMovesHtml()); changeActiveTag('movesTab', 'nav-link')">
+                        <li class="nav-item" onclick="showInfoTab(generateMovesHtml()); changeToActiveTab('movesTab', 'nav-link')">
                             <a id="movesTab" class="nav-link">Moves</a>
                         </li>
                     </ul>
@@ -118,27 +123,6 @@ function generateBaseStatsHTML() {
         </table>
         
     `
-}
-
-function renderStatsHTML() {
-    let htmlText = '';
-    for (let i = 0; i < currentPokemon['stats'].length; i++) {
-        let stat = currentPokemon['stats'][i];
-        htmlText += /*html*/`
-            <tr>
-                <td><b>${stat['stat']['name']}</b></td>
-                <td>${stat['base_stat']}</td>
-                <td>
-                <div class="progress w-100 bg-grey">
-                <div class="progress-bar progress-bar-animated ${currentPokemon['types'][0]['type']['name']}" role="progressbar" style="width: 0%;">
-                        </div>
-                </div>
-
-                </td>
-            </tr>  
-        `;
-    }
-    return htmlText;
 }
 
 function generateAboutHTML() {
@@ -226,31 +210,5 @@ function generateMovesHtml() {
             </table>
         </div>
     `;
-    return htmlText;
-}
-
-function renderMovesHTML() {
-    let moves = sortMoves();
-    let htmlText = '';
-    for (let i = 0; i < moves.length; i++) {
-        let move = moves[i];
-        let moveName = move['move']['name'];
-        let levelLearnedAt = move['version_group_details'][0]['level_learned_at'];
-
-        if (move['version_group_details'][0]['move_learn_method']['name'] === 'level-up') {
-            htmlText += /*html*/`
-                <tr>
-                    <td>${capitalizeFirstLetter(moveName)}</td>
-                    <td>${levelLearnedAt}</td>
-                </tr>
-            `;
-        }
-    }
-    return htmlText;
-}
-
-function renderTextEntries() {
-    let textEntries = sortTextEntries();
-    let htmlText = textEntries[0]['flavor_text'];
     return htmlText;
 }
