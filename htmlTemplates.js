@@ -119,7 +119,7 @@ function generatePokemonCardHTML(pokemon) {
 
 function generateBaseStatsHTML() {
     return /*html*/`
-        <table class="table">
+        <table class="table about">
             ${renderStatsHTML()}
         </table>
         
@@ -128,10 +128,10 @@ function generateBaseStatsHTML() {
 
 function generateAboutHTML() {
     return /*html*/`
-        <div class="d-flex flex-column py-2 px-5 gap-3">
+        <div class="d-flex flex-column py-2 px-5 gap-3 about">
             <h4>Pokedex Entry</h4>
             <i>"${renderTextEntries()}"</i>
-            <div class="d-flex flex-column fs-6 w-75">
+            <div class="d-flex flex-column fs-6 w-75 about">
                 <div class="d-flex justify-content-between align-items-center gap-3">
                     <b>Base happiness: </b>${currentInfo['base_happiness']}
                 </div>
@@ -156,7 +156,7 @@ async function generateEvolutionHTML() {
     let nameFirstPokemon = currentEvolutionChain['chain']['species']['name'];
     let nameSecondPokemon = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
     let htmlText = /*html*/`
-        <div class="d-flex flex-column py-2 px-5 gap-3">
+        <div class="d-flex flex-column py-2 px-5 gap-3 about">
             <h4>Evolution Chain</h4>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex flex-column gap-2">
@@ -197,7 +197,7 @@ async function generateEvolutionHTML() {
 function generateMovesHtml() {
     let htmlText = '';
     htmlText = /*html*/`
-        <div class="d-flex flex-column py-2 px-5">
+        <div class="d-flex flex-column py-2 px-5 about">
             <table class="custom-table ${currentPokemon['types'][0]['type']['name']}">
                 <thead>
                     <tr>
