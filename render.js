@@ -1,10 +1,10 @@
 async function renderPokemon() {
     let index = 0;
     let htmlText = '';
-    let url = `https://pokeapi.co/api/v2/pokemon/`
     pokemonList = [];
     for (let i = offset; i < limit; i++) {
-        let response = await fetch(`${url}${currentPokedexList[i]['pokemon_species']['name']}`);
+        let url = modifyUrl(currentPokedexList[i]['pokemon_species']['url']);
+        let response = await fetch(url);
         if (response.ok) {
             let pokemon = await response.json();
             pokemonList.push(pokemon);
@@ -15,6 +15,15 @@ async function renderPokemon() {
     document.getElementById('content').innerHTML = htmlText;
 }
 
+function modifyUrl(string) {
+    if (string.includes('-species')) {
+        return string.replace('-species', '');
+    } else {
+        return string;
+    }
+}
+    
+
 async function renderPokemonCard(pokemon) {
     let popup = document.getElementById('popup');
     let htmlText = ''
@@ -22,6 +31,8 @@ async function renderPokemonCard(pokemon) {
     htmlText += generatePokemonCardHTML(pokemon);
     popup.innerHTML = '';
     popup.innerHTML = htmlText;
+    renderHeartIcon();
+    checkIfLikedPageIsActive();
     await getEvolutionData();
 
 }
@@ -40,6 +51,21 @@ async function renderSearchedPokemon() {
     document.getElementById('content').innerHTML = htmlText;
     hideFromView('pages');
     document.getElementById('pokemonSearch').value = '';
+}
+
+async function renderLikedPokemon() {
+    generateLoadingScreenHTML('content');
+    let htmlText = '';
+    let index = 0;
+    pokemonList = [];
+    for (let i = 0; i < listOfLikedPokemon.length; i++) {
+        const pokemon = listOfLikedPokemon[i];
+        pokemonList.push(pokemon);
+        htmlText += generateOverviewHTML(pokemon, index);
+        index++;
+    }
+    document.getElementById('pokedexRegion').innerHTML = 'Your liked Pokemon';
+    document.getElementById('content').innerHTML = htmlText;
 }
 
 function renderPageButtonsHTML() {
@@ -72,6 +98,13 @@ function renderStatsHTML() {
         `;
     }
     return htmlText;
+}
+
+function renderHeartIcon() {
+    if (checkIfLiked()) {
+        document.getElementById('heart').classList.add('d-none');
+        document.getElementById('heartFilled').classList.remove('d-none');
+    }
 }
 
 function renderMovesHTML() {

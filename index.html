@@ -27,14 +27,14 @@
                 <label for="pokemonSearch" name="pokemon-searche"></label>
                 <div class="d-flex flex-column form-item">
                     <input type="text" id="pokemonSearch" placeholder="Type in the Pokemon name..." class="form-control"
-                        onclick="getAllPokemon();" oninput="searchPokemon(this.value)">
+                        onclick="getAllPokemon();" oninput="searchPokemon()">
                     <div id="resultContainer" class="resultContainer form-item d-none">
                         <ul id="searchResults"></ul>
                     </div>
                 </div>
             </div>
             <div>
-                <button class="btn btn-light" onclick="renderSearchedPokemon()">Search</button>
+                <button class="btn btn-light" onclick="renderSearchedPokemon(); hideFromView('resultContainer')">Search</button>
             </div>
         </form>
         <img src="img/menu.png" alt="menu icon" onclick="toggleVisibility('sidebar', 'd-none')" class="header-icon">
@@ -44,22 +44,23 @@
     <div class="sidebar d-none" id="sidebar">
         <ul class="dropdown-list bg-light">
             <h3>Pokedex Regions</h3>
-            <li onclick="init(2); hideFromView('sidebar')" class="list-group-item" id="kanto">Kanto</li>
-            <li onclick="init(3); hideFromView('sidebar')" class="list-group-item" id="johto">Johto</li>
-            <li onclick="init(4); hideFromView('sidebar')" class="list-group-item" id="hoenn">Hoenn</li>
-            <li onclick="init(5); hideFromView('sidebar')" class="list-group-item" id="sinnoh">Sinnoh</li>
-            <li onclick="init(8); hideFromView('sidebar')" class="list-group-item" id="unova">Unova</li>
-            <li onclick="init(11); hideFromView('sidebar')" class="list-group-item" id="conquestGallery">Conquest
+            <li onclick="showPokedex(2, 'kanto', 'list-group-item')" class="list-group-item" id="kanto">Kanto</li>
+            <li onclick="showPokedex(3, 'johto', 'list-group-item')" class="list-group-item" id="johto">Johto</li>
+            <li onclick="showPokedex(4, 'hoenn', 'list-group-item')" class="list-group-item" id="hoenn">Hoenn</li>
+            <li onclick="showPokedex(5, 'sinnoh', 'list-group-item')" class="list-group-item" id="sinnoh">Sinnoh</li>
+            <li onclick="showPokedex(8, 'unova', 'list-group-item')" class="list-group-item" id="unova">Unova</li>
+            <li onclick="showPokedex(11, 'conquestGallery', 'list-group-item')" class="list-group-item" id="conquestGallery">Conquest
                 Gallery</li>
-            <li onclick="init(12); hideFromView('sidebar')" class="list-group-item" id="kalosCentral">Kalos Central</li>
-            <li onclick="init(13); hideFromView('sidebar')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li>
-            <li onclick="init(14); hideFromView('sidebar')" class="list-group-item" id="kalosMountain">Kalos Mountain
+            <li onclick="showPokedex(12, 'kalosCentral', 'list-group-item')" class="list-group-item" id="kalosCentral">Kalos Central</li>
+            <li onclick="showPokedex(13, 'kalosCoastal', 'list-group-item')" class="list-group-item" id="kalosCoastal">Kalos Coastal</li>
+            <li onclick="showPokedex(14, 'kalosMountain', 'list-group-item')" class="list-group-item" id="kalosMountain">Kalos Mountain
             </li>
-            <li onclick="init(16); hideFromView('sidebar')" class="list-group-item" id="alola">Alola</li>
-            <li onclick="init(17); hideFromView('sidebar')" class="list-group-item" id="melemele">Melemele</li>
-            <li onclick="init(18); hideFromView('sidebar')" class="list-group-item" id="akala">Akala</li>
-            <li onclick="init(19); hideFromView('sidebar')" class="list-group-item" id="ulaula">Ulaula</li>
-            <li onclick="init(20); hideFromView('sidebar')" class="list-group-item" id="poni">Poni</li>
+            <li onclick="showPokedex(16, 'alola', 'list-group-item')" class="list-group-item" id="alola">Alola</li>
+            <li onclick="showPokedex(17, 'melemele', 'list-group-item')" class="list-group-item" id="melemele">Melemele</li>
+            <li onclick="showPokedex(18, 'akala', 'list-group-item')" class="list-group-item" id="akala">Akala</li>
+            <li onclick="showPokedex(19, 'ulaula', 'list-group-item')" class="list-group-item" id="ulaula">Ulaula</li>
+            <li onclick="showPokedex(20, 'poni', 'list-group-item')" class="list-group-item" id="poni">Poni</li>
+            <li onclick="renderLikedPokemon(); hideFromView('sidebar'); changeToActiveTab('likedPokemon', 'list-group-item')" class="list-group-item" id="likedPokemon">Liked Pokemon</li>
         </ul>
     </div>
     <main id="mainContainer" onclick="hideFromView('sidebar')">
@@ -75,7 +76,7 @@
     <div class="popup d-none" id="popup" onclick="toggleVisibility('popup', 'd-none')">
 
     </div>
-    <!--  <footer><a href="https://www.vecteezy.com/free-vector/pokemon-logo">Pokemon Logo Vectors by Vecteezy</a></footer> -->
+    <footer><a href="https://www.vecteezy.com/free-vector/pokemon-logo">Pokemon Logo Vectors by Vecteezy</a></footer>
 </body>
 
 </html>

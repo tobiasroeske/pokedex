@@ -2,6 +2,7 @@
 let pokemonList = [];
 let currentPokedexList = [];
 let listOfAllPokemon = [];
+let listOfLikedPokemon = [];
 let currentPokedex;
 let currentPokemon;
 let currentInfo;
@@ -50,9 +51,20 @@ async function getPokedex(number) {
 
 }
 
+async function showPokedex(pokedexNumber, id, tab) {
+    await init(pokedexNumber);
+    resetCurrentPage();
+    hideFromView('sidebar');
+    changeToActiveTab(id, tab)
+}
+
 function resetOffsetAndLimit() {
     offset = 0;
     limit = 25;
+}
+
+function resetCurrentPage() {
+    currentPage = 1;
 }
 
 function showNextPage() {
@@ -94,6 +106,20 @@ function updatePageButtons() {
     }
 }
 
+function checkIfLikedPageIsActive() {
+    let likedTab = document.getElementById('likedPokemon');
+    if (likedTab.classList.contains('active')) {
+        let heartIcon = document.getElementById('heartFilled');
+        heartIcon.setAttribute('onclick', 'removeFromLikedPage()');
+    }
+}
+
+function removeFromLikedPage() {
+    changeHeartIcon();
+    renderLikedPokemon();
+    hideFromView('popup');
+}
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -106,10 +132,24 @@ function hideFromView(id) {
     document.getElementById(id).classList.add('d-none');
 }
 
+function checkIfLiked() {
+    let isLiked = listOfLikedPokemon.some(element => element['name'] == currentPokemon['name'])
+    return isLiked;
+}
 
 function changeHeartIcon() {
+    if (!checkIfLiked()) {
+        listOfLikedPokemon.push(currentPokemon);
+    } else {
+        removeFromLikedList();
+    }
     toggleVisibility('heart', 'd-none');
     toggleVisibility('heartFilled', 'd-none');
+}
+
+function removeFromLikedList() {
+    let index = listOfLikedPokemon.findIndex(element => element['name'] == currentPokemon['name']);
+    listOfLikedPokemon.splice(index, 1);
 }
 
 function stopDefaultAction(event) {
@@ -151,8 +191,8 @@ async function getEvolutionData() {
     }
 }
 
-async function getPokemonImage(name) {
-    let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+async function getPokemonImage(url) {
+    url = modifyUrl(url);
     let response = await fetch(url);
     if (response.ok) {
         let pokemon = await response.json();
@@ -208,7 +248,6 @@ function sortMoves() {
 }
 
 function sortArrayByLanguage(array) {
-    // let entries = currentInfo['flavor_text_entries'];
     array.sort((a, b) => {
         if (a['language']['name'] == 'en') {
             return -1;
@@ -225,8 +264,6 @@ function sortPokedexLanguages() {
 
 }
 
-
-
 async function getSearchedPokemon() {
     let search = document.getElementById('pokemonSearch').value.toLowerCase();
     pokemonList = [];
@@ -242,17 +279,31 @@ async function getSearchedPokemon() {
     }
 }
 
+async function getLikedPokemon() {
+    pokemonList = [];
+    for (let i = 0; i < listOfLikedPokemon.length; i++) {
+        let likedPokemon = listOfLikedPokemon[i];  
+        let response = await fetch(likedPokemon['url']);
+        if (response.ok) {
+            let pokemon = await response.json();
+            pokemonList.push(pokemon);
+        }
+        
+    }
+}
+
 function displaySearchValue () {
     let headline = document.getElementById('pokedexRegion');
     let searchValue = document.getElementById('pokemonSearch').value;
     headline.innerHTML = /*html*/`Search results of  "${searchValue}"`;
 }
 
-
-function searchPokemon(value) {
-    const searchResults = document.getElementById('searchResults');
+function searchPokemon() {
+    let searchValue = document.getElementById('pokemonSearch').value;
+    let searchResults = document.getElementById('searchResults');
     searchResults.innerHTML = '';
-    let regex = new RegExp(value, 'i'); // Erstellt einen case-insensitiven Ausdruck mit dem Inhalv von value
+    searchValue = searchValue.toLowerCase();
+    let regex = new RegExp(searchValue, 'i'); // Erstellt einen case-insensitiven Ausdruck mit dem Inhalt von value
     listOfAllPokemon.forEach(pokemon => {
         if (pokemon['name'].match(regex)) { // Untersucht, ob regex einen Namen matched
             const listItem = document.createElement('li');
@@ -262,7 +313,7 @@ function searchPokemon(value) {
             searchResults.appendChild(listItem);
         }
     });
-    displaySearchResults(value);
+    displaySearchResults(searchValue);
 }
 
 function displaySearchResults(value) {

@@ -9,7 +9,7 @@ function generateLoadingScreenHTML(id) {
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-    `
+    `;
 }
 
 function generateHeadlineHTML() {
@@ -35,7 +35,7 @@ function generateOverviewHTML(pokemon, i) {
     return /*html*/`
     <div class="poke-container-small ${pokemon['types'][0]['type']['name']}" id="${pokemon['name']}Overview" onclick="openPokemonCard(${i})">
         <span class="pokeNumber">#${pokemon['id']}</span>
-        <h2>${capitalizeFirstLetter(pokemon['name'])}</h2>
+        <h2>${capitalizeFirstLetter(pokemon['species']['name'])}</h2>
         <div class="poke-details" id="pokeDetails">
             <div class="types">
                 ${typeHTML(pokemon)}
@@ -43,7 +43,7 @@ function generateOverviewHTML(pokemon, i) {
             <img src="${primaryImagePath == null ? secondaryImagePath : primaryImagePath}" class="poke-image">
         </div>
     </div>
-`;
+    `;
 }
 
 function generatePageButtons() {
@@ -123,7 +123,7 @@ function generateBaseStatsHTML() {
             ${renderStatsHTML()}
         </table>
         
-    `
+    `;
 }
 
 function generateAboutHTML() {
@@ -149,49 +149,71 @@ function generateAboutHTML() {
                 </div>
             </div>
         </div>
-    `
+    `;
 }
 
+
+
 async function generateEvolutionHTML() {
-    let nameFirstPokemon = currentEvolutionChain['chain']['species']['name'];
-    let nameSecondPokemon = currentEvolutionChain['chain']['evolves_to'][0]['species']['name'];
-    let htmlText = /*html*/`
+    let chain = currentEvolutionChain['chain'];
+    if (chain['evolves_to'].length === 0) {
+        return generateNoEvolutionHTML();
+    }
+    let nameFirstPokemon = chain['species']['name'];
+    let nameSecondPokemon = chain['evolves_to'][0]['species']['name'];
+    let htmlText = `
         <div class="d-flex flex-column py-2 px-5 gap-3 about">
             <h4>Evolution Chain</h4>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex flex-column gap-2">
-                    <img src="${await getPokemonImage(nameFirstPokemon)}" class="evolution-img">
-                    <h6>${capitalizeFirstLetter(nameFirstPokemon)}</h6>
-                </div>
-                <img src="img/arrow-right.svg" alt="" class="icon">
-                <div class="d-flex flex-column gap-2">
-                    <img src="${await getPokemonImage(nameSecondPokemon)}" class="evolution-img">
-                    <h6>${capitalizeFirstLetter(nameSecondPokemon)}</h6>
-                </div>
-            </div>
+            ${await generateFirstRowHTML(nameFirstPokemon, nameSecondPokemon)}
+            ${await generateSecondRowHTML(nameSecondPokemon)}
+        </div>
     `;
+    return htmlText;
+}
+
+function generateNoEvolutionHTML() {
+    return `
+        <div class="d-flex flex-column py-2 px-5 gap-3 about">
+            <h4>Evolution Chain</h4>
+            <div><h5>This pokemon does not evolve</h5></div>
+        </div>
+    `;
+}
+
+async function generateFirstRowHTML(firstName, secondName) {
+    return `
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-column gap-2">
+                <img src="${await getPokemonImage(currentEvolutionChain['chain']['species']['url'])}" class="evolution-img">
+                <h6>${capitalizeFirstLetter(firstName)}</h6>
+            </div>
+            <img src="img/arrow-right.svg" alt="" class="icon">
+            <div class="d-flex flex-column gap-2">
+                <img src="${await getPokemonImage(currentEvolutionChain['chain']['evolves_to'][0]['species']['url'])}" class="evolution-img">
+                <h6>${capitalizeFirstLetter(secondName)}</h6>
+            </div>
+        </div>
+    `;
+}
+
+async function generateSecondRowHTML(nameSecondPokemon) {
     if (currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'].length > 0) {
         let nameThirdPokemon = currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-        htmlText += /*html*/`
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex flex-column gap-2">
-                        <img src="${await getPokemonImage(nameSecondPokemon)}" class="evolution-img">
-                        <h6>${capitalizeFirstLetter(nameSecondPokemon)}</h6>
-                    </div>
-                    <img src="img/arrow-right.svg" alt="" class="icon">
-                    <div class="d-flex flex-column gap-2">
-                        <img src="${await getPokemonImage(nameThirdPokemon)}" class="evolution-img">
-                        <h6>${capitalizeFirstLetter(nameThirdPokemon)}</h6>
-                    </div>
-                </div>
+        return `
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-column gap-2">
+                <img src="${await getPokemonImage(currentEvolutionChain['chain']['evolves_to'][0]['species']['url'])}" class="evolution-img">
+                <h6>${capitalizeFirstLetter(nameSecondPokemon)}</h6>
             </div>
+            <img src="img/arrow-right.svg" alt="" class="icon">
+            <div class="d-flex flex-column gap-2">
+                <img src="${await getPokemonImage(currentEvolutionChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['url'])}" class="evolution-img">
+                <h6>${capitalizeFirstLetter(nameThirdPokemon)}</h6>
+            </div>
+        </div>
         `;
-    } else {
-        htmlText += /*html*/`
-            </div>
-        `
     }
-    return htmlText;
+    return '';
 }
 
 function generateMovesHtml() {
